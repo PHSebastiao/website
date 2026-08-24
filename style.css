@@ -359,7 +359,7 @@ ul {
     animation: float 6s ease-in-out infinite;
 }
 
-.avatar-glow {»
+/* ===== Enhanced Avatar Hover ===== */
 .hero-avatar:hover {
     transform: scale(1.03) rotate(2deg);
     border-color: rgba(77, 163, 255, 0.5);
@@ -369,25 +369,32 @@ ul {
 }
 
 .avatar-glow {
-
-.avatar-glow {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(77, 163, 255, 0.4), transparent 70%);
+    background: radial-gradient(circle, rgba(77, 163, 255, 0.5), transparent 70%);
     filter: blur(20px);
-    opacity: 0.6;
+    opacity: 0.7;
     animation: pulse 4s ease-in-out infinite;
-    z-index: -1;
+    z-index: 0;
 }
 
+.hero-avatar {
+    opacity: 1;
+    z-index: 1;
+    position: relative;
+}
+
+/* ===== Code Showcase ===== */
 @keyframes float {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-10px); }
 }
+
+/* ===== Code Showcase ===== */
 
 /* ===== Code Showcase ===== */
 .code-showcase {
@@ -765,7 +772,6 @@ body {
     cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%234da3ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s8-10 10-10 10 10 10 10-8 10-10 10S2 12 2 12z"/></svg>'), auto;
 }
 
-}»
 a, .btn, .social-link, .tech-item, .hero-avatar {
     cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="%234da3ff" stroke="%23ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s8-10 10-10 10 10 10 10-8 10-10 10S2 12 2 12z"/></svg>'), pointer;
 }
@@ -775,42 +781,5 @@ a, .btn, .social-link, .tech-item, .hero-avatar {
     opacity: 1;
     transform: none;
 }
-}
 
-/* ===== Enhanced Avatar Hover ===== */
-.hero-avatar:hover {
-    transform: scale(1.03) rotate(2deg);
-    border-color: rgba(77, 163, 255, 0.5);
-    box-shadow: 
-        0 12px 40px rgba(0, 0, 0, 0.4),
-        0 0 0 6px rgba(77, 163, 255, 0.2);
-}
 
-/* ===== Code Window Hover ===== */
-.code-window:hover {
-    border-color: rgba(77, 163, 255, 0.3);
-    box-shadow: 0 8px 32px rgba(77, 163, 255, 0.15);
-}
-
-/* ===== Project Stats Hover ===== */
-.stat-item:hover {
-    transform: scale(1.05);
-    color: #4da3ff;
-}
-
-/* ===== Focus States for Accessibility ===== */
-a:focus, .btn:focus, .social-link:focus, .tech-item:focus {
-    outline: 2px solid #4da3ff;
-    outline-offset: 2px;
-}
-
-/* ===== Reduced Motion Support ===== */
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-}
