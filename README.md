@@ -1,28 +1,28 @@
 # Brejelinha — Landing Page
 
-Landing page estática de desenvolvedor. Mostra meus projetos, trabalho e perfil.
+Landing page estática e minimalista de desenvolvedor.
 
 ## Sobre
 
 Sou **Pedro Henrique da Silva Sebastião**, conhecido online como **Brejelinha** ou **Brejela**.
-Desenvolvedor FullStack (primariamente web) na [IATec](https://iatec.com/pt/), em Campinas/Hortolândia, SP.
+Desenvolvedor FullStack (primariamente web) na [IATec](https://iatec.com/pt/).
 Desenvolvo coisas quando dá — bots para Twitch, dashboards e ferramentas web.
 
-## Projetos destacados
+## Projeto em destaque
 
-- **[Botijela](https://twitch.tv/botijela)** — Bot da Twitch para tradução de mensagens e gerenciamento de filas de espectadores.
-- **[jsFolhinha](https://github.com/Brejelinha/jsFolhinha)** — Bot de Twitch com 50+ comandos, suporte a Docker.
-- **[my-agenda](https://github.com/PHSebastiao/my-agenda)** — Agenda de eventos com ASP.NET e Angular.
-- **[gametime](https://github.com/PHSebastiao/gametime)** — Projeto de informações e acessibilidade para jogos.
-- **[siteuniversidades](https://github.com/PHSebastiao/siteuniversidades)** — CRUD em PHP para gerenciamento de universidades.
+### Botijela
+Bot da Twitch para tradução de mensagens e gerenciamento de filas de espectadores.
+- [Twitch](https://twitch.tv/botijela)
+- [Dashboard](https://botijela.brejelinha.net/)
+- [Documentação](https://github.com/Brejelinha/botijela-docs)
+- [Ko-fi](https://ko-fi.com/botijela)
 
 ## Como rodar localmente
 
 ```bash
-# Abra o index.html no navegador
-npx serve .
-# ou
-python3 -m http.server 8000
+cd c:/Users/pedro.sebastiao/Projects/brejelinha
+python -m http.server 8000
+# abrir http://localhost:8000
 ```
 
 ## Estrutura
