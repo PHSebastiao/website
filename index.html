@@ -17,17 +17,58 @@
 </head>
 <body>
     <div class="page-wrap">
+        
+        <!-- ===== Scroll Progress ===== -->
+        <div class="scroll-progress-container">
+            <div class="scroll-progress-bar"></div>
+        </div>
+
+        <!-- ===== Background Animation ===== -->
+        <div class="background-animation">
+            <div class="gradient-orb orb-1"></div>
+            <div class="gradient-orb orb-2"></div>
+            <div class="gradient-orb orb-3"></div>
+            <div class="code-particles">
+                <span class="particle">const</span>
+                <span class="particle">function</span>
+                <span class="particle">await</span>
+                <span class="particle">async</span>
+                <span class="particle">=></span>
+                <span class="particle">import</span>
+                <span class="particle">export</span>
+                <span class="particle">class</span>
+            </div>
+        </div>
 
         <!-- ===== Hero ===== -->
         <header class="hero">
-            <div class="container">
+            <div class="container hero-container">
                 <div class="hero-content">
-                    <h1 class="hero-name">Brejela</h1>
+                    <div class="hero-title-container">
+                        <h1 class="hero-name">
+                            <span class="name-text">Brejela</span>
+                        </h1>
+                        <div class="typing-animation">
+                            <span class="typing-text">Desenvolvedor FullStack</span>
+                            <span class="cursor">|</span>
+                        </div>
+                    </div>
+                    
                     <p class="hero-tagline">Um usuário comum da internet, desenvolvo coisas quando dá na telha.</p>
+                    
                     <p class="hero-bio">
                         Desenvolvedor FullStack na <a href="https://iatec.com/pt/" target="_blank" rel="noopener">IATec</a>.
                         Crio bots para Twitch, dashboards e ferramentas web.
                     </p>
+                    
+                    <div class="tech-stack">
+                        <span class="tech-item">TypeScript</span>
+                        <span class="tech-item">Node.js</span>
+                        <span class="tech-item">Express</span>
+                        <span class="tech-item">Twitch API</span>
+                        <span class="tech-item">MySQL</span>
+                    </div>
+                    
                     <div class="hero-social">
                         <a href="https://github.com/PHSebastiao" target="_blank" rel="noopener" class="social-link" aria-label="GitHub">
                             <img src="https://cdn.simpleicons.org/github/white" alt="GitHub" width="20" height="20">
@@ -50,10 +91,57 @@
                     </div>
                 </div>
                 <div class="hero-image">
-                    <img src="assets/images/image01.jpg" alt="Brejelinha" class="hero-avatar">
+                    <div class="avatar-container">
+                        <img src="assets/images/image01.jpg" alt="Brejelinha" class="hero-avatar">
+                        <div class="avatar-glow"></div>
+                    </div>
                 </div>
             </div>
         </header>
+
+        <!-- ===== Code Showcase ===== -->
+        <section class="container section">
+            <div class="code-showcase">
+                <div class="code-window">
+                    <div class="window-header">
+                        <div class="window-buttons">
+                            <span class="btn-close"></span>
+                            <span class="btn-minimize"></span>
+                            <span class="btn-maximize"></span>
+                        </div>
+                        <span class="window-title">botijela.ts</span>
+                        <div class="window-actions">
+                            <span class="action-icon">★</span>
+                        </div>
+                    </div>
+                    <div class="code-content">
+                        <pre class="code-block"><code><span class="token-comment">// Twitch chat command handler</span>
+<span class="token-keyword">export</span> <span class="token-keyword">const</span> <span class="token-function">commandHandler</span> = <span class="token-keyword">async</span> (
+  channel: <span class="token-type">string</span>,
+  username: <span class="token-type">string</span>,
+  text: <span class="token-type">string</span>,
+  msg: <span class="token-type">CommandMessage</span>
+) =&gt; {
+  <span class="token-keyword">const</span> [cmd, ...args] = text.trim().split(<span class="token-string">" "</span>);
+  
+  <span class="token-keyword">if</span> (isDuplicateMessage(msg.id)) <span class="token-keyword">return</span>;
+  
+  <span class="token-keyword">const</span> command = globalCommands[cmd];
+  <span class="token-keyword">if</span> (!command) <span class="token-keyword">return</span>;
+  
+  <span class="token-keyword">if</span> (checkSpamPatterns(text)) {
+    <span class="token-keyword">await</span> banAs(asUser, channel, msg.userId, BanReason.SPAM);
+    <span class="token-keyword">return</span>;
+  }
+  
+  <span class="token-keyword">await</span> command.execute(channel, username, args, msg);
+};
+
+<span class="token-keyword">export</span> <span class="token-keyword">default</span> commandHandler;</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- ===== Featured Project ===== -->
         <section class="container section">
@@ -62,8 +150,23 @@
                 <h2 class="project-title">Botijela</h2>
                 <p class="project-description">
                     Bot da Twitch para tradução de mensagens e gerenciamento de filas de espectadores.
-                    Desenvolvido para canais que desejam traduzir conversas entre idiomas e organizar a interação com o público.
+                    Suporta comandos personalizados, integração multi-plataforma (Twitch + Kick),
+                    detecção automática de spam e tradução via Google Cloud Translate.
                 </p>
+                <div class="project-stats">
+                    <div class="stat-item">
+                        <span class="stat-value">15+</span>
+                        <span class="stat-label">Comandos</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">3</span>
+                        <span class="stat-label">Plataformas</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">v3.1</span>
+                        <span class="stat-label">Versão</span>
+                    </div>
+                </div>
                 <div class="project-links">
                     <a href="https://twitch.tv/botijela" target="_blank" rel="noopener" class="btn btn-primary">Ver no Twitch</a>
                     <a href="https://botijela.brejelinha.net/" target="_blank" rel="noopener" class="btn btn-secondary">Dashboard</a>
@@ -97,5 +200,81 @@
     <footer class="footer">
         <p>&copy; 2024 Brejelinha. Feito com ❤ e muito café.</p>
     </footer>
+    
+    <script>
+        // Typing animation for bio
+        document.addEventListener('DOMContentLoaded', function() {
+            const bioTexts = [
+                "Desenvolvedor FullStack",
+                "Criador do Botijela",
+                "Entusiasta de Tecnologia"
+            ];
+            
+            const typingText = document.querySelector('.typing-text');
+            if (!typingText) return;
+            
+            let textIndex = 0;
+            let charIndex = 0;
+            let isDeleting = false;
+            
+            function type() {
+                const currentText = bioTexts[textIndex];
+                
+                if (isDeleting) {
+                    charIndex--;
+                } else {
+                    charIndex++;
+                }
+                
+                typingText.textContent = currentText.substring(0, charIndex);
+                
+                if (!isDeleting && charIndex < currentText.length) {
+                    setTimeout(type, 150);
+                } else if (!isDeleting && charIndex === currentText.length) {
+                    setTimeout(() => {
+                        isDeleting = true;
+                        setTimeout(type, 2000);
+                    }, 2000);
+                } else if (isDeleting && charIndex > 0) {
+                    setTimeout(type, 75);
+                } else {
+                    isDeleting = false;
+                    textIndex = (textIndex + 1) % bioTexts.length;
+                    setTimeout(type, 500);
+                }
+            }
+            
+            type();
+            
+            // Scroll progress indicator
+            const progressBar = document.querySelector('.scroll-progress-bar');
+            if (progressBar) {
+                window.addEventListener('scroll', function() {
+                    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                    const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                    const scrolled = (scrollTop / scrollHeight) * 100;
+                    progressBar.style.width = scrolled + '%';
+                });
+            }
+            
+            // Section animations with Intersection Observer
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: "0px 0px -50px 0px"
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.section').forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
 </body>
 </html>
