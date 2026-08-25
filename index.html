@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="no-js">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,13 +7,18 @@
     <meta name="description" content="Brejelinha (Pedro Henrique). Desenvolvedor FullStack na IATec. Crio bots para Twitch e ferramentas web.">
     <meta property="og:title" content="Brejelinha — Dev FullStack">
     <meta property="og:description" content="Desenvolvedor FullStack na IATec. Crio bots para Twitch e ferramentas web.">
-    <meta property="og:image" content="https://brejela.carrd.co/assets/images/card.jpg">
+    <meta property="og:image" content="https://brejelinha.dev/assets/images/card.jpg">
+    <meta property="og:url" content="https://brejelinha.dev/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#0a0a0f">
     <meta property="og:type" content="website">
-    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml">
+    <link rel="canonical" href="https://brejelinha.dev/">
+    <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="style.css">
+    <script>document.documentElement.classList.remove('no-js');</script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="page-wrap">
@@ -48,10 +53,11 @@
                         <h1 class="hero-name">
                             <span class="name-text">Brejela</span>
                         </h1>
-                        <div class="typing-animation">
+                        <div class="typing-animation" aria-hidden="true">
                             <span class="typing-text">Desenvolvedor FullStack</span>
-                            <span class="cursor">|</span>
+                            <span class="cursor" aria-hidden="true">|</span>
                         </div>
+                        <span class="sr-only">Desenvolvedor FullStack, Criador do Botijela, Entusiasta de Tecnologia</span>
                     </div>
                     
                     <p class="hero-tagline">Um usuário comum da internet, desenvolvo coisas quando dá na telha.</p>
@@ -79,7 +85,7 @@
                         <a href="https://bsky.app/profile/brejelinha.net" target="_blank" rel="noopener" class="social-link" aria-label="Bluesky">
                             <img src="https://cdn.simpleicons.org/bluesky/white" alt="Bluesky" width="20" height="20">
                         </a>
-                        <a href="https://twitter.com/brejelinha" target="_blank" rel="noopener" class="social-link" aria-label="Twitter">
+                        <a href="https://twitter.com/brejelinha" target="_blank" rel="noopener" class="social-link" aria-label="X (Twitter)">
                             <img src="https://cdn.simpleicons.org/x/white" alt="X" width="20" height="20">
                         </a>
                         <a href="https://discordapp.com/users/653528165398085642" target="_blank" rel="noopener" class="social-link" aria-label="Discord">
@@ -93,29 +99,32 @@
                 <div class="hero-image">
                     <div class="avatar-container">
                         <img src="assets/images/image01.jpg" alt="Brejelinha" class="hero-avatar">
-                        <div class="avatar-glow"></div>
+                        <div class="avatar-glow" aria-hidden="true"></div>
                     </div>
                 </div>
             </div>
         </header>
 
+        <!-- ===== Main Content ===== -->
+        <main>
+
         <!-- ===== Code Showcase ===== -->
-        <section class="container section">
+        <section class="container section" id="code-showcase" aria-labelledby="code-showcase-title">
             <div class="code-showcase">
                 <div class="code-window">
                     <div class="window-header">
                         <div class="window-buttons">
-                            <span class="btn-close"></span>
-                            <span class="btn-minimize"></span>
-                            <span class="btn-maximize"></span>
+                            <span class="btn-close" aria-hidden="true"></span>
+                            <span class="btn-minimize" aria-hidden="true"></span>
+                            <span class="btn-maximize" aria-hidden="true"></span>
                         </div>
                         <span class="window-title">botijela.ts</span>
                         <div class="window-actions">
-                            <span class="action-icon">★</span>
+                            <span class="action-icon" aria-hidden="true">★</span>
                         </div>
                     </div>
                     <div class="code-content">
-                        <pre class="code-block"><code><span class="token-comment">// Twitch chat command handler</span>
+                        <pre class="code-block"><code class="language-ts"><span class="token-comment">// Twitch chat command handler</span>
 <span class="token-keyword">export</span> <span class="token-keyword">const</span> <span class="token-function">commandHandler</span> = <span class="token-keyword">async</span> (
   channel: <span class="token-type">string</span>,
   username: <span class="token-type">string</span>,
@@ -196,9 +205,10 @@
         </section>
 
     </div>
+</main>
 
     <footer class="footer">
-        <p>&copy; 2024 Brejelinha. Feito com ❤ e muito café.</p>
+        <p>&copy; <span id="current-year">2024</span> Brejelinha. Feito com ❤ e muito café.</p>
     </footer>
     
     <script>
@@ -217,6 +227,12 @@
             let charIndex = 0;
             let isDeleting = false;
             
+            // Check for reduced motion preference
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            
+            if (prefersReducedMotion) {
+                typingText.textContent = bioTexts[0];
+            } else {
             function type() {
                 const currentText = bioTexts[textIndex];
                 
@@ -244,17 +260,27 @@
                 }
             }
             
-            type();
+                type();
+            }
             
             // Scroll progress indicator
             const progressBar = document.querySelector('.scroll-progress-bar');
             if (progressBar) {
-                window.addEventListener('scroll', function() {
-                    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-                    const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-                    const scrolled = (scrollTop / scrollHeight) * 100;
-                    progressBar.style.width = scrolled + '%';
-                });
+                let scrollTicking = false;
+            window.addEventListener('scroll', function() {
+                if (!scrollTicking) {
+                    window.requestAnimationFrame(function() {
+                        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                        if (scrollHeight > 0) {
+                            const scrolled = (scrollTop / scrollHeight) * 100;
+                            progressBar.style.transform = 'scaleX(' + (scrolled / 100) + ')';
+                        }
+                        scrollTicking = false;
+                    });
+                    scrollTicking = true;
+                }
+            }, { passive: true });
             }
             
             // Section animations with Intersection Observer
@@ -276,5 +302,6 @@
             });
         });
     </script>
+<script>document.getElementById("current-year").textContent = new Date().getFullYear();</script>
 </body>
 </html>
