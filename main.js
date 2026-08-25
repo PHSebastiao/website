@@ -278,6 +278,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     orb.style.transform = 'translate(' + offsetX.toFixed(2) + 'px,' + offsetY.toFixed(2) + 'px)';
                 }
+
+                requestAnimationFrame(animate);
             }
 
             // Magnetic attraction on interactive targets (P2)
