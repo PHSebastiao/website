@@ -19,24 +19,26 @@ Bot da Twitch para tradução de mensagens e gerenciamento de filas de espectado
 
 ## Como rodar localmente
 
+```»
 ```bash
-cd c:/Users/pedro.sebastiao/Projects/brejelinha
 python -m http.server 8000
 # abrir http://localhost:8000
+```
 ```
 
 ## Estrutura
 
 ```
 brejelinha/
+```»
 ├── index.html
 ├── style.css
 ├── README.md
 └── assets/
     └── images/
-        ├── image01.jpg          # Foto de perfil
         ├── avatar-brejelinha.png # Avatar do GitHub
         └── favicon.svg
+```
 ```
 
 ## Conecte-se
