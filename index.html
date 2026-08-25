@@ -34,18 +34,24 @@
 
         <!-- ===== Background Animation ===== -->
         <div class="background-animation">
-            <div class="gradient-orb orb-1"></div>
-            <div class="gradient-orb orb-2"></div>
-            <div class="gradient-orb orb-3"></div>
+            <div class="orb-wrapper" data-orb="1">
+                <div class="gradient-orb orb-1"></div>
+            </div>
+            <div class="orb-wrapper" data-orb="2">
+                <div class="gradient-orb orb-2"></div>
+            </div>
+            <div class="orb-wrapper" data-orb="3">
+                <div class="gradient-orb orb-3"></div>
+            </div>
             <div class="code-particles" aria-hidden="true">
-                <span class="particle">const</span>
-                <span class="particle">function</span>
-                <span class="particle">await</span>
-                <span class="particle">async</span>
-                <span class="particle">=></span>
-                <span class="particle">import</span>
-                <span class="particle">export</span>
-                <span class="particle">class</span>
+                <span class="particle-wrapper"><span class="particle">const</span></span>
+                <span class="particle-wrapper"><span class="particle">function</span></span>
+                <span class="particle-wrapper"><span class="particle">await</span></span>
+                <span class="particle-wrapper"><span class="particle">async</span></span>
+                <span class="particle-wrapper"><span class="particle">=></span></span>
+                <span class="particle-wrapper"><span class="particle">import</span></span>
+                <span class="particle-wrapper"><span class="particle">export</span></span>
+                <span class="particle-wrapper"><span class="particle">class</span></span>
             </div>
         </div>
 
@@ -319,10 +325,92 @@
                     }
                 });
             }, observerOptions);
-
-            document.querySelectorAll('.section').forEach(section => {
-                observer.observe(section);
+            document.querySelectorAll('.section').forEach(function (s) {
+                observer.observe(s);
             });
+
+            // ===== Cursor interactivity =====
+            if (!prefersReducedMotion) {
+                var bgAnim = document.querySelector('.background-animation');
+                if (bgAnim) {
+                    var orbWrappers = bgAnim.querySelectorAll('.orb-wrapper');
+                    var particleWrappers = bgAnim.querySelectorAll('.particle-wrapper');
+                    var REPEL_RADIUS = 180;
+                    var REPEL_STRENGTH = 35;
+                    var ORB_PARALLAX_MAX = 20;
+                    var targetX = window.innerWidth / 2;
+                    var targetY = window.innerHeight / 2;
+                    var cursorX = window.innerWidth / 2;
+                    var cursorY = window.innerHeight / 2;
+
+                    document.addEventListener('mousemove', function (e) {
+                        targetX = e.clientX;
+                        targetY = e.clientY;
+                    }, { passive: true });
+
+                    document.addEventListener('mouseleave', function () {
+                        targetX = window.innerWidth / 2;
+                        targetY = window.innerHeight / 2;
+                    }, { passive: true });
+
+                    function lerp(a, b, t) {
+                        return a + (b - a) * t;
+                    }
+
+                    function animate() {
+                        cursorX = lerp(cursorX, targetX, 0.08);
+                        cursorY = lerp(cursorY, targetY, 0.08);
+
+                        // Particles repulsion
+                        for (var i = 0; i < particleWrappers.length; i++) {
+                            var wrapper = particleWrappers[i];
+                            var inner = wrapper.querySelector('.particle');
+                            var rect = inner.getBoundingClientRect();
+                            var px = rect.left + rect.width / 2;
+                            var py = rect.top + rect.height / 2;
+                            var dx = px - cursorX;
+                            var dy = py - cursorY;
+                            var dist = Math.sqrt(dx * dx + dy * dy);
+
+                            if (dist < REPEL_RADIUS && dist > 1) {
+                                var force = (1 - dist / REPEL_RADIUS) * REPEL_STRENGTH;
+                                wrapper.style.transform = 'translate(' + ((dx / dist) * force).toFixed(1) + 'px,' + ((dy / dist) * force).toFixed(1) + 'px)';
+                            } else {
+                                wrapper.style.transform = '';
+                            }
+                        }
+
+                        // Orbs parallax (opposite to cursor, subtle) + repulsion
+                        var centerX = window.innerWidth / 2;
+                        var centerY = window.innerHeight / 2;
+                        var ratios = [1, 0.6, 0.35];
+                        for (var j = 0; j < orbWrappers.length; j++) {
+                            var orb = orbWrappers[j];
+                            var ratio = ratios[j];
+                            var offsetX = -((cursorX - centerX) / centerX) * ORB_PARALLAX_MAX * ratio;
+                            var offsetY = -((cursorY - centerY) / centerY) * ORB_PARALLAX_MAX * ratio;
+
+                            var orbRect = orb.getBoundingClientRect();
+                            var orbCx = orbRect.left + orbRect.width / 2;
+                            var orbCy = orbRect.top + orbRect.height / 2;
+                            var orbDx = orbCx - cursorX;
+                            var orbDy = orbCy - cursorY;
+                            var orbDist = Math.sqrt(orbDx * orbDx + orbDy * orbDy);
+                            if (orbDist < REPEL_RADIUS && orbDist > 1) {
+                                var orbForce = (1 - orbDist / REPEL_RADIUS) * REPEL_STRENGTH;
+                                offsetX += (orbDx / orbDist) * orbForce;
+                                offsetY += (orbDy / orbDist) * orbForce;
+                            }
+
+                            orb.style.transform = 'translate(' + offsetX.toFixed(2) + 'px,' + offsetY.toFixed(2) + 'px)';
+                        }
+
+                        requestAnimationFrame(animate);
+                    }
+
+                    requestAnimationFrame(animate);
+                }
+            }
         });
     </script>
     <script>document.getElementById("current-year").textContent = new Date().getFullYear();</script>

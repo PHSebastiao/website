@@ -53,8 +53,30 @@ ul {
     overflow: hidden;
 }
 
-.gradient-orb {
+/* ===== Cursor Interactivity (Wrappers) ===== */
+.orb-wrapper {
     position: absolute;
+    will-change: transform;
+}
+
+.orb-wrapper[data-orb="1"] {
+    top: -100px;
+    left: -100px;
+}
+
+.orb-wrapper[data-orb="2"] {
+    bottom: -50px;
+    right: -50px;
+}
+
+.orb-wrapper[data-orb="3"] {
+    top: 50%;
+    left: 50%;
+    margin-top: -125px;
+    margin-left: -125px;
+}
+
+.gradient-orb {
     border-radius: 50%;
     filter: blur(80px);
     opacity: 0.3;
@@ -65,8 +87,6 @@ ul {
     width: 400px;
     height: 400px;
     background: radial-gradient(circle, #4da3ff 0%, transparent 70%);
-    top: -100px;
-    left: -100px;
     animation-duration: 12s;
 }
 
@@ -74,8 +94,6 @@ ul {
     width: 300px;
     height: 300px;
     background: radial-gradient(circle, #8a2be2 0%, transparent 70%);
-    bottom: -50px;
-    right: -50px;
     animation-duration: 15s;
     animation-delay: 2s;
 }
@@ -84,9 +102,6 @@ ul {
     width: 250px;
     height: 250px;
     background: radial-gradient(circle, #ff6b6b 0%, transparent 70%);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     animation-duration: 10s;
     animation-delay: 1s;
 }
@@ -107,34 +122,40 @@ ul {
     pointer-events: none;
 }
 
+.particle-wrapper {
+    display: inline-block;
+    will-change: transform;
+}
+
 .particle {
+    display: inline-block;
     color: #4da3ff;
     animation: float 20s infinite linear;
     animation-fill-mode: backwards;
 }
 
-.particle:nth-child(1) {
+.particle-wrapper:nth-child(1) .particle {
     animation-delay: 0s;
 }
-.particle:nth-child(2) {
+.particle-wrapper:nth-child(2) .particle {
     animation-delay: 1s;
 }
-.particle:nth-child(3) {
+.particle-wrapper:nth-child(3) .particle {
     animation-delay: 2s;
 }
-.particle:nth-child(4) {
+.particle-wrapper:nth-child(4) .particle {
     animation-delay: 3s;
 }
-.particle:nth-child(5) {
+.particle-wrapper:nth-child(5) .particle {
     animation-delay: 4s;
 }
-.particle:nth-child(6) {
+.particle-wrapper:nth-child(6) .particle {
     animation-delay: 5s;
 }
-.particle:nth-child(7) {
+.particle-wrapper:nth-child(7) .particle {
     animation-delay: 6s;
 }
-.particle:nth-child(8) {
+.particle-wrapper:nth-child(8) .particle {
     animation-delay: 7s;
 }
 
@@ -879,4 +900,3 @@ a,
 }
 
 /* ===== Screen Reader Only ===== */
-
