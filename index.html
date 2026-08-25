@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <script>document.documentElement.classList.remove('no-js');</script>
+    <script>document.documentElement.classList.remove('no-js'); document.documentElement.classList.add('js');</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brejelinha — Dev FullStack</title>
     <meta name="description"
@@ -11,7 +11,7 @@
     <meta property="og:title" content="Brejelinha — Dev FullStack">
     <meta property="og:description"
         content="Desenvolvedor FullStack na IATec. Crio bots para Twitch e ferramentas web.">
-    <meta property="og:image" content="https://brejelinha.dev/assets/images/card.jpg">
+    <meta property="og:image" content="https://brejelinha.dev/assets/images/avatar-brejelinha.png">
     <meta property="og:url" content="https://brejelinha.dev/">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="theme-color" content="#0a0a0f">
@@ -21,10 +21,11 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
 </head>
 
 <body>
+    <div class="cursor-glow" aria-hidden="true"></div>
     <div class="page-wrap">
 
         <!-- ===== Scroll Progress ===== -->
@@ -34,13 +35,13 @@
 
         <!-- ===== Background Animation ===== -->
         <div class="background-animation">
-            <div class="orb-wrapper" data-orb="1">
+            <div class="orb-wrapper" data-orb="1" data-parallax="1">
                 <div class="gradient-orb orb-1"></div>
             </div>
-            <div class="orb-wrapper" data-orb="2">
+            <div class="orb-wrapper" data-orb="2" data-parallax="0.6">
                 <div class="gradient-orb orb-2"></div>
             </div>
-            <div class="orb-wrapper" data-orb="3">
+            <div class="orb-wrapper" data-orb="3" data-parallax="0.35">
                 <div class="gradient-orb orb-3"></div>
             </div>
             <div class="code-particles" aria-hidden="true">
@@ -80,39 +81,39 @@
                     </p>
 
                     <div class="tech-stack">
-                        <span class="tech-item">C#</span>
-                        <span class="tech-item">TypeScript</span>
-                        <span class="tech-item">Node.js</span>
-                        <span class="tech-item">Angular</span>
-                        <span class="tech-item">Express</span>
+                        <span class="tech-item glass">C#</span>
+                        <span class="tech-item glass">TypeScript</span>
+                        <span class="tech-item glass">Node.js</span>
+                        <span class="tech-item glass">Angular</span>
+                        <span class="tech-item glass">Express</span>
                     </div>
 
                     <div class="hero-social">
-                        <a href="https://github.com/PHSebastiao" target="_blank" rel="noopener" class="social-link"
+                        <a href="https://github.com/PHSebastiao" target="_blank" rel="noopener" class="social-link glass"
                             aria-label="GitHub">
                             <img src="https://cdn.simpleicons.org/github/white" alt="" width="20" height="20">
                         </a>
                         <a href="https://www.linkedin.com/in/pedro-henrique-sebastiao/" target="_blank" rel="noopener"
-                            class="social-link" aria-label="LinkedIn">
+                            class="social-link glass" aria-label="LinkedIn">
                             <img src="assets/images/linkedin.svg" alt="" width="20" height="20">
                         </a>
-                        <a href="https://twitch.tv/brejelinha" target="_blank" rel="noopener" class="social-link"
+                        <a href="https://twitch.tv/brejelinha" target="_blank" rel="noopener" class="social-link glass"
                             aria-label="Twitch">
                             <img src="https://cdn.simpleicons.org/twitch/white" alt="" width="20" height="20">
                         </a>
                         <a href="https://bsky.app/profile/brejelinha.net" target="_blank" rel="noopener"
-                            class="social-link" aria-label="Bluesky">
+                            class="social-link glass" aria-label="Bluesky">
                             <img src="https://cdn.simpleicons.org/bluesky/white" alt="" width="20" height="20">
                         </a>
-                        <a href="https://twitter.com/brejelinha" target="_blank" rel="noopener" class="social-link"
+                        <a href="https://twitter.com/brejelinha" target="_blank" rel="noopener" class="social-link glass"
                             aria-label="X (Twitter)">
                             <img src="https://cdn.simpleicons.org/x/white" alt="" width="20" height="20">
                         </a>
                         <a href="https://discordapp.com/users/653528165398085642" target="_blank" rel="noopener"
-                            class="social-link" aria-label="Discord">
+                            class="social-link glass" aria-label="Discord">
                             <img src="https://cdn.simpleicons.org/discord/white" alt="" width="20" height="20">
                         </a>
-                        <a href="https://anilist.co/user/Brejela/" target="_blank" rel="noopener" class="social-link"
+                        <a href="https://anilist.co/user/Brejela/" target="_blank" rel="noopener" class="social-link glass"
                             aria-label="AniList">
                             <img src="https://cdn.simpleicons.org/anilist/white" alt="" width="20" height="20">
                         </a>
@@ -133,7 +134,7 @@
             <!-- ===== Code Showcase ===== -->
             <section class="container section" id="code-showcase" aria-labelledby="code-showcase-title">
                 <div class="code-showcase">
-                    <div class="code-window">
+                    <div class="code-window glass">
                         <div class="window-header">
                             <div class="window-buttons">
                                 <span class="btn-close" aria-hidden="true"></span>
@@ -146,29 +147,52 @@
                             </div>
                         </div>
                         <div class="code-content">
-                            <pre class="code-block"><code class="language-ts"><span class="token-comment">// Twitch chat command handler</span>
-<span class="token-keyword">export</span> <span class="token-keyword">const</span> <span class="token-function">commandHandler</span> = <span class="token-keyword">async</span> (
-  channel: <span class="token-type">string</span>,
-  username: <span class="token-type">string</span>,
-  text: <span class="token-type">string</span>,
-  msg: <span class="token-type">CommandMessage</span>
-) =&gt; {
-  <span class="token-keyword">const</span> [cmd, ...args] = text.trim().split(<span class="token-string">" "</span>);
-  
-  <span class="token-keyword">if</span> (isDuplicateMessage(msg.id)) <span class="token-keyword">return</span>;
-  
-  <span class="token-keyword">const</span> command = globalCommands[cmd];
-  <span class="token-keyword">if</span> (!command) <span class="token-keyword">return</span>;
-  
-  <span class="token-keyword">if</span> (checkSpamPatterns(text)) {
-    <span class="token-keyword">await</span> banAs(asUser, channel, msg.userId, BanReason.SPAM);
-    <span class="token-keyword">return</span>;
+                            <pre class="code-block"><code class="language-ts"><span class="code-line"><span class="token-comment">// Twitch chat command handler</span></span>
+<span class="code-line"><span class="token-keyword">export</span> <span class="token-keyword">const</span> <span class="token-function">commandHandler</span> = <span class="token-keyword">async</span> (</span>
+<span class="code-line">  channel: <span class="token-type">string</span>,</span>
+<span class="code-line">  username: <span class="token-type">string</span>,</span>
+<span class="code-line">  text: <span class="token-type">string</span>,</span>
+<span class="code-line">  msg: <span class="token-type">CommandMessage</span></span>
+<span class="code-line">) =&gt; {</span>
+<span class="code-line">  <span class="token-keyword">const</span> [cmd, ...args] = text.trim().split(<span class="token-string">" "</span>);</span>
+<span class="code-line">  </span>
+<span class="code-line">  <span class="token-keyword">if</span> (isDuplicateMessage(msg.id)) <span class="token-keyword">return</span>;</span>
+<span class="code-line">  </span>
+<span class="code-line">  <span class="token-keyword">const</span> command = globalCommands[cmd];</span>
+<span class="code-line">  <span class="token-keyword">if</span> (!command) <span class="token-keyword">return</span>;</span>
+<span class="code-line">  </span>
+<span class="code-line">  <span class="token-keyword">if</span> (checkSpamPatterns(text)) {</span>
+<span class="code-line">    <span class="token-keyword">await</span> banAs(asUser, channel, msg.userId, BanReason.SPAM);</span>
+<span class="code-line">    <span class="token-keyword">return</span>;</span>
+<span class="code-line">  }</span>
+<span class="code-line">  </span>
+<span class="code-line">  <span class="token-keyword">await</span> command.execute(channel, username, args, msg);</span>
+<span class="code-line">};</span>
+<span class="code-line"></span></code></pre>
+                        <p class="sr-only">// Twitch chat command handler
+export const commandHandler = async (
+  channel: string,
+  username: string,
+  text: string,
+  msg: CommandMessage
+) => {
+  const [cmd, ...args] = text.trim().split(" ");
+
+  if (isDuplicateMessage(msg.id)) return;
+
+  const command = globalCommands[cmd];
+  if (!command) return;
+
+  if (checkSpamPatterns(text)) {
+    await banAs(asUser, channel, msg.userId, BanReason.SPAM);
+    return;
   }
-  
-  <span class="token-keyword">await</span> command.execute(channel, username, args, msg);
+
+  await command.execute(channel, username, args, msg);
 };
 
-<span class="token-keyword">export</span> <span class="token-keyword">default</span> commandHandler;</code></pre>
+export default commandHandler;</p>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -176,7 +200,7 @@
 
             <!-- ===== Featured Project ===== -->
             <section class="container section">
-                <div class="project-featured">
+                <div class="project-featured glass">
                     <div class="project-badge">Projeto em destaque</div>
                     <h2 class="project-title">Botijela</h2>
                     <p class="project-description">
@@ -186,15 +210,15 @@
                     </p>
                     <div class="project-stats">
                         <div class="stat-item">
-                            <span class="stat-value">15+</span>
+                            <span class="stat-value" data-count="15">0</span><span class="stat-suffix" aria-hidden="true">+</span>
                             <span class="stat-label">Comandos</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-value">3</span>
+                            <span class="stat-value" data-count="3">0</span>
                             <span class="stat-label">Plataformas</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-value">v3.1</span>
+                            <span class="stat-value stat-static">v3.1</span>
                             <span class="stat-label">Versão</span>
                         </div>
                     </div>
@@ -202,9 +226,9 @@
                         <a href="https://twitch.tv/botijela" target="_blank" rel="noopener" class="btn btn-primary">Ver
                             no Twitch</a>
                         <a href="https://botijela.brejelinha.net/" target="_blank" rel="noopener"
-                            class="btn btn-secondary">Dashboard</a>
+                            class="btn btn-secondary glass">Dashboard</a>
                         <a href="https://botijela.brejelinha.net/wiki/" target="_blank" rel="noopener"
-                            class="btn btn-secondary">Documentação</a>
+                            class="btn btn-secondary glass">Documentação</a>
                     </div>
                 </div>
             </section>
@@ -223,12 +247,13 @@
 
             <!-- ===== Contact ===== -->
             <section class="container section">
-                <div class="contact">
+                <div class="contact glass">
                     <h3 class="contact-title">Vamos conversar?</h3>
                     <p class="contact-text">
-                        <a href="mailto:phsilva.sebastiao@gmail.com"
-                            class="link-highlight">phsilva.sebastiao@gmail.com</a>
+                        <a href="mailto:phsilva.sebastiao@gmail.com" id="email-link"
+                            class="link-highlight" title="Clique para copiar">phsilva.sebastiao@gmail.com</a>
                     </p>
+                    <p class="copy-toast sr-only" id="copy-toast" aria-live="polite"></p>
                 </div>
             </section>
 
@@ -236,184 +261,22 @@
 
         <footer class="footer">
             <p>&copy; <span id="current-year">2024</span> Brejelinha. Feito com ❤ e muito café.</p>
+            <p class="status-line" aria-hidden="true"><span class="status-prompt">brejela@portfolio:~$</span> status: <span class="status-online">online</span> <span class="status-cursor">█</span> <span id="uptime"></span></p>
         </footer>
+
+    <div class="terminal-overlay" id="terminal-overlay" role="dialog" aria-modal="true" aria-label="Terminal secreto" hidden>
+        <div class="terminal-window">
+            <div class="terminal-header">
+                <span class="terminal-title">brejela@portfolio: ~</span>
+                <button class="terminal-close" id="terminal-close" aria-label="Fechar terminal">×</button>
+            </div>
+            <div class="terminal-body" id="terminal-body" tabindex="-1"></div>
+        </div>
+    </div>
 
     </div>
 
-    <script>
-        // Typing animation for bio
-        document.addEventListener('DOMContentLoaded', function () {
-            const bioTexts = [
-                "Desenvolvedor FullStack",
-                "Criador do Botijela",
-                "Entusiasta de Tecnologia"
-            ];
-
-            const typingText = document.querySelector('.typing-text');
-            if (!typingText) return;
-
-            let textIndex = 0;
-            let charIndex = 0;
-            let isDeleting = false;
-
-            // Check for reduced motion preference
-            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-            if (prefersReducedMotion) {
-                typingText.textContent = bioTexts[0];
-            } else {
-                function type() {
-                    const currentText = bioTexts[textIndex];
-
-                    if (isDeleting) {
-                        charIndex--;
-                    } else {
-                        charIndex++;
-                    }
-
-                    typingText.textContent = currentText.substring(0, charIndex);
-
-                    if (!isDeleting && charIndex < currentText.length) {
-                        setTimeout(type, 150);
-                    } else if (!isDeleting && charIndex === currentText.length) {
-                        setTimeout(() => {
-                            isDeleting = true;
-                            setTimeout(type, 2000);
-                        }, 2000);
-                    } else if (isDeleting && charIndex > 0) {
-                        setTimeout(type, 75);
-                    } else {
-                        isDeleting = false;
-                        textIndex = (textIndex + 1) % bioTexts.length;
-                        setTimeout(type, 500);
-                    }
-                }
-
-                type();
-            }
-
-            // Scroll progress indicator
-            const progressBar = document.querySelector('.scroll-progress-bar');
-            if (progressBar) {
-                let scrollTicking = false;
-                window.addEventListener('scroll', function () {
-                    if (!scrollTicking) {
-                        window.requestAnimationFrame(function () {
-                            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-                            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-                            if (scrollHeight > 0) {
-                                const scrolled = (scrollTop / scrollHeight) * 100;
-                                progressBar.style.transform = 'scaleX(' + (scrolled / 100) + ')';
-                            }
-                            scrollTicking = false;
-                        });
-                        scrollTicking = true;
-                    }
-                }, { passive: true });
-            }
-
-            // Section animations with Intersection Observer
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: "0px 0px -50px 0px"
-            };
-
-            const observer = new IntersectionObserver(function (entries) {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, observerOptions);
-            document.querySelectorAll('.section').forEach(function (s) {
-                observer.observe(s);
-            });
-
-            // ===== Cursor interactivity =====
-            if (!prefersReducedMotion) {
-                var bgAnim = document.querySelector('.background-animation');
-                if (bgAnim) {
-                    var orbWrappers = bgAnim.querySelectorAll('.orb-wrapper');
-                    var particleWrappers = bgAnim.querySelectorAll('.particle-wrapper');
-                    var REPEL_RADIUS = 180;
-                    var REPEL_STRENGTH = 35;
-                    var ORB_PARALLAX_MAX = 20;
-                    var targetX = window.innerWidth / 2;
-                    var targetY = window.innerHeight / 2;
-                    var cursorX = window.innerWidth / 2;
-                    var cursorY = window.innerHeight / 2;
-
-                    document.addEventListener('mousemove', function (e) {
-                        targetX = e.clientX;
-                        targetY = e.clientY;
-                    }, { passive: true });
-
-                    document.addEventListener('mouseleave', function () {
-                        targetX = window.innerWidth / 2;
-                        targetY = window.innerHeight / 2;
-                    }, { passive: true });
-
-                    function lerp(a, b, t) {
-                        return a + (b - a) * t;
-                    }
-
-                    function animate() {
-                        cursorX = lerp(cursorX, targetX, 0.08);
-                        cursorY = lerp(cursorY, targetY, 0.08);
-
-                        // Particles repulsion
-                        for (var i = 0; i < particleWrappers.length; i++) {
-                            var wrapper = particleWrappers[i];
-                            var inner = wrapper.querySelector('.particle');
-                            var rect = inner.getBoundingClientRect();
-                            var px = rect.left + rect.width / 2;
-                            var py = rect.top + rect.height / 2;
-                            var dx = px - cursorX;
-                            var dy = py - cursorY;
-                            var dist = Math.sqrt(dx * dx + dy * dy);
-
-                            if (dist < REPEL_RADIUS && dist > 1) {
-                                var force = (1 - dist / REPEL_RADIUS) * REPEL_STRENGTH;
-                                wrapper.style.transform = 'translate(' + ((dx / dist) * force).toFixed(1) + 'px,' + ((dy / dist) * force).toFixed(1) + 'px)';
-                            } else {
-                                wrapper.style.transform = '';
-                            }
-                        }
-
-                        // Orbs parallax (opposite to cursor, subtle) + repulsion
-                        var centerX = window.innerWidth / 2;
-                        var centerY = window.innerHeight / 2;
-                        var ratios = [1, 0.6, 0.35];
-                        for (var j = 0; j < orbWrappers.length; j++) {
-                            var orb = orbWrappers[j];
-                            var ratio = ratios[j];
-                            var offsetX = -((cursorX - centerX) / centerX) * ORB_PARALLAX_MAX * ratio;
-                            var offsetY = -((cursorY - centerY) / centerY) * ORB_PARALLAX_MAX * ratio;
-
-                            var orbRect = orb.getBoundingClientRect();
-                            var orbCx = orbRect.left + orbRect.width / 2;
-                            var orbCy = orbRect.top + orbRect.height / 2;
-                            var orbDx = orbCx - cursorX;
-                            var orbDy = orbCy - cursorY;
-                            var orbDist = Math.sqrt(orbDx * orbDx + orbDy * orbDy);
-                            if (orbDist < REPEL_RADIUS && orbDist > 1) {
-                                var orbForce = (1 - orbDist / REPEL_RADIUS) * REPEL_STRENGTH;
-                                offsetX += (orbDx / orbDist) * orbForce;
-                                offsetY += (orbDy / orbDist) * orbForce;
-                            }
-
-                            orb.style.transform = 'translate(' + offsetX.toFixed(2) + 'px,' + offsetY.toFixed(2) + 'px)';
-                        }
-
-                        requestAnimationFrame(animate);
-                    }
-
-                    requestAnimationFrame(animate);
-                }
-            }
-        });
-    </script>
-    <script>document.getElementById("current-year").textContent = new Date().getFullYear();</script>
+    <script src="main.js" defer></script>
 </body>
 
 </html>
