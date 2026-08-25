@@ -31,12 +31,18 @@ python -m http.server 8000
 ```
 brejelinha/
 ├── index.html
-├── style.css
+├── main.js
+├── base.css
+├── components.css
+├── background.css
+├── LICENSE
 ├── README.md
 └── assets/
     └── images/
         ├── avatar-brejelinha.png
-        └── favicon.svg
+        ├── avatar-botijela.jpg
+        ├── favicon.svg
+        └── linkedin.svg
 ```
 
 ## Conecte-se
@@ -46,3 +52,7 @@ brejelinha/
 - [Twitch @brejelinha](https://twitch.tv/brejelinha)
 - [Bluesky @brejelinha.net](https://bsky.app/profile/brejelinha.net)
 - [E-mail: phsilva.sebastiao@gmail.com](mailto:phsilva.sebastiao@gmail.com)
+
+## Licença
+
+[MIT](LICENSE) © 2026 Pedro Henrique da Silva Sebastião (Brejelinha)
