@@ -5,7 +5,7 @@ Landing page estática e minimalista de desenvolvedor.
 ## Sobre
 
 Sou **Pedro Henrique da Silva Sebastião**, conhecido online como **Brejelinha** ou **Brejela**.
-Desenvolvedor FullStack (primariamente web) na [IATec](https://iatec.com/pt/).
+Desenvolvedor FullStack (primariamente web) no [IATec](https://iatec.com/pt/).
 Desenvolvo coisas quando dá — bots para Twitch, dashboards e ferramentas web.
 
 ## Projeto em destaque
@@ -14,7 +14,7 @@ Desenvolvo coisas quando dá — bots para Twitch, dashboards e ferramentas web.
 Bot da Twitch para tradução de mensagens e gerenciamento de filas de espectadores.
 - [Twitch](https://twitch.tv/botijela)
 - [Dashboard](https://botijela.brejelinha.net/)
-- [Documentação](https://github.com/Brejelinha/botijela-docs)
+- [Documentação](https://botijela.brejelinha.net/wiki/)
 - [Ko-fi](https://ko-fi.com/botijela)
 
 ## Como rodar localmente

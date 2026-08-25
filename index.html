@@ -2,6 +2,7 @@
 <html lang="pt-BR" class="no-js">
 <head>
     <meta charset="UTF-8">
+    <script>document.documentElement.classList.remove('no-js');</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brejelinha — Dev FullStack</title>
     <meta name="description" content="Brejelinha (Pedro Henrique). Desenvolvedor FullStack na IATec. Crio bots para Twitch e ferramentas web.">
@@ -15,7 +16,6 @@
     <link rel="canonical" href="https://brejelinha.dev/">
     <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="style.css">
-    <script>document.documentElement.classList.remove('no-js');</script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -33,7 +33,7 @@
             <div class="gradient-orb orb-1"></div>
             <div class="gradient-orb orb-2"></div>
             <div class="gradient-orb orb-3"></div>
-            <div class="code-particles">
+            <div class="code-particles" aria-hidden="true">
                 <span class="particle">const</span>
                 <span class="particle">function</span>
                 <span class="particle">await</span>
@@ -63,7 +63,7 @@
                     <p class="hero-tagline">Um usuário comum da internet, desenvolvo coisas quando dá na telha.</p>
                     
                     <p class="hero-bio">
-                        Desenvolvedor FullStack na <a href="https://iatec.com/pt/" target="_blank" rel="noopener">IATec</a>.
+                        Desenvolvedor FullStack no <a href="https://iatec.com/pt/" target="_blank" rel="noopener">IATec</a>.
                         Crio bots para Twitch, dashboards e ferramentas web.
                     </p>
                     
@@ -77,28 +77,28 @@
                     
                     <div class="hero-social">
                         <a href="https://github.com/PHSebastiao" target="_blank" rel="noopener" class="social-link" aria-label="GitHub">
-                            <img src="https://cdn.simpleicons.org/github/white" alt="GitHub" width="20" height="20">
+                            <img src="https://cdn.simpleicons.org/github/white" alt="" width="20" height="20">
                         </a>
                         <a href="https://twitch.tv/brejelinha" target="_blank" rel="noopener" class="social-link" aria-label="Twitch">
-                            <img src="https://cdn.simpleicons.org/twitch/white" alt="Twitch" width="20" height="20">
+                            <img src="https://cdn.simpleicons.org/twitch/white" alt="" width="20" height="20">
                         </a>
                         <a href="https://bsky.app/profile/brejelinha.net" target="_blank" rel="noopener" class="social-link" aria-label="Bluesky">
-                            <img src="https://cdn.simpleicons.org/bluesky/white" alt="Bluesky" width="20" height="20">
+                            <img src="https://cdn.simpleicons.org/bluesky/white" alt="" width="20" height="20">
                         </a>
                         <a href="https://twitter.com/brejelinha" target="_blank" rel="noopener" class="social-link" aria-label="X (Twitter)">
-                            <img src="https://cdn.simpleicons.org/x/white" alt="X" width="20" height="20">
+                            <img src="https://cdn.simpleicons.org/x/white" alt="" width="20" height="20">
                         </a>
                         <a href="https://discordapp.com/users/653528165398085642" target="_blank" rel="noopener" class="social-link" aria-label="Discord">
-                            <img src="https://cdn.simpleicons.org/discord/white" alt="Discord" width="20" height="20">
+                            <img src="https://cdn.simpleicons.org/discord/white" alt="" width="20" height="20">
                         </a>
                         <a href="https://anilist.co/user/Brejela/" target="_blank" rel="noopener" class="social-link" aria-label="AniList">
-                            <img src="https://cdn.simpleicons.org/anilist/white" alt="AniList" width="20" height="20">
+                            <img src="https://cdn.simpleicons.org/anilist/white" alt="" width="20" height="20">
                         </a>
                     </div>
                 </div>
                 <div class="hero-image">
                     <div class="avatar-container">
-                        <img src="assets/images/image01.jpg" alt="Brejelinha" class="hero-avatar">
+                        <img src="assets/images/avatar-brejelinha.png" alt="Brejelinha" class="hero-avatar">
                         <div class="avatar-glow" aria-hidden="true"></div>
                     </div>
                 </div>
@@ -118,7 +118,7 @@
                             <span class="btn-minimize" aria-hidden="true"></span>
                             <span class="btn-maximize" aria-hidden="true"></span>
                         </div>
-                        <span class="window-title">botijela.ts</span>
+                        <span class="window-title" id="code-showcase-title">botijela.ts</span>
                         <div class="window-actions">
                             <span class="action-icon" aria-hidden="true">★</span>
                         </div>
@@ -204,12 +204,13 @@
             </div>
         </section>
 
-    </div>
-</main>
+    </main>
 
     <footer class="footer">
         <p>&copy; <span id="current-year">2024</span> Brejelinha. Feito com ❤ e muito café.</p>
     </footer>
+
+    </div>
     
     <script>
         // Typing animation for bio
