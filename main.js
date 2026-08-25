@@ -1,24 +1,22 @@
-// Typing animation for bio
 document.addEventListener('DOMContentLoaded', function () {
+    // Typing animation for bio
     const bioTexts = [
         "Desenvolvedor FullStack",
         "Criador do Botijela",
         "Entusiasta de Tecnologia"
     ];
 
-    const typingText = document.querySelector('.typing-text');
-    if (!typingText) return;
+    // Check for reduced motion preference
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    const typingText = document.querySelector('.typing-text');
     let textIndex = 0;
     let charIndex = 0;
     let isDeleting = false;
 
-    // Check for reduced motion preference
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (prefersReducedMotion) {
+    if (typingText && prefersReducedMotion) {
         typingText.textContent = bioTexts[0];
-    } else {
+    } else if (typingText) {
         function type() {
             const currentText = bioTexts[textIndex];
 
@@ -82,10 +80,12 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }, observerOptions);
+
     document.querySelectorAll('.section').forEach(function (s) {
         observer.observe(s);
     });
-    // ===== Auto-typing code window (P1) =====
+
+    // ===== Auto-typing code window =====
     var codeSection = document.getElementById('code-showcase');
     var codeLines = codeSection ? codeSection.querySelectorAll('.code-line') : [];
     if (codeSection && codeLines.length) {
@@ -111,10 +111,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         function tick() {
-            if (!inViewport) return;
+            if (!inViewport) {
+                typingTimer = null;
+                return;
+            }
             if (lineIndex >= codeLines.length) {
-                clearTyped();
-                typingTimer = setTimeout(tick, 4000);
+                typingTimer = setTimeout(function () {
+                    clearTyped();
+                    tick();
+                }, 3000);
                 return;
             }
             showLine(lineIndex);
@@ -137,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // ===== Stats count-up (P4) =====
+    // ===== Stats count-up =====
     var countTargets = document.querySelectorAll('.stat-value[data-count]');
     if (countTargets.length) {
         var countObserver = new IntersectionObserver(function (entries) {
@@ -170,8 +175,6 @@ document.addEventListener('DOMContentLoaded', function () {
             countObserver.observe(t);
         });
     }
-
-    // ===== Randomized particle drift =====
 
     // ===== Randomized particle drift =====
     if (!prefersReducedMotion) {
@@ -314,13 +317,14 @@ document.addEventListener('DOMContentLoaded', function () {
 // Footer year
 document.getElementById("current-year").textContent = new Date().getFullYear();
 
-// ===== Copy e-mail + uptime + easter egg terminal (P5/P3) =====
+// ===== Copy e-mail + uptime =====
 document.addEventListener('DOMContentLoaded', function () {
     var emailLink = document.getElementById('email-link');
     var toast = document.getElementById('copy-toast');
     var toastTimer = null;
     if (emailLink && toast) {
         emailLink.addEventListener('click', function (e) {
+            e.preventDefault();
             var email = 'phsilva.sebastiao@gmail.com';
             function showToast(msg) {
                 toast.textContent = msg;
@@ -346,19 +350,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.body.removeChild(ta);
                 return ok;
             }
+            function copyFailed() {
+                window.location.href = 'mailto:' + email;
+            }
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(email).then(function () {
-                    e.preventDefault();
                     showToast('E-mail copiado!');
                 }).catch(function () {
                     if (fallbackCopy()) {
-                        e.preventDefault();
                         showToast('E-mail copiado!');
+                    } else {
+                        copyFailed();
                     }
                 });
             } else if (fallbackCopy()) {
-                e.preventDefault();
                 showToast('E-mail copiado!');
+            } else {
+                copyFailed();
             }
         });
     }

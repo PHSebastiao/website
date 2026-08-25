@@ -18,10 +18,14 @@
     <meta property="og:type" content="website">
     <link rel="canonical" href="https://brejelinha.dev/">
     <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="background.css">
+    <link rel="stylesheet" href="components.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
@@ -89,8 +93,8 @@
                     </div>
 
                     <div class="hero-social">
-                        <a href="https://github.com/PHSebastiao" target="_blank" rel="noopener" class="social-link glass"
-                            aria-label="GitHub">
+                        <a href="https://github.com/PHSebastiao" target="_blank" rel="noopener"
+                            class="social-link glass" aria-label="GitHub">
                             <img src="https://cdn.simpleicons.org/github/white" alt="" width="20" height="20">
                         </a>
                         <a href="https://www.linkedin.com/in/pedro-henrique-sebastiao/" target="_blank" rel="noopener"
@@ -105,16 +109,16 @@
                             class="social-link glass" aria-label="Bluesky">
                             <img src="https://cdn.simpleicons.org/bluesky/white" alt="" width="20" height="20">
                         </a>
-                        <a href="https://twitter.com/brejelinha" target="_blank" rel="noopener" class="social-link glass"
-                            aria-label="X (Twitter)">
+                        <a href="https://twitter.com/brejelinha" target="_blank" rel="noopener"
+                            class="social-link glass" aria-label="X (Twitter)">
                             <img src="https://cdn.simpleicons.org/x/white" alt="" width="20" height="20">
                         </a>
                         <a href="https://discordapp.com/users/653528165398085642" target="_blank" rel="noopener"
                             class="social-link glass" aria-label="Discord">
                             <img src="https://cdn.simpleicons.org/discord/white" alt="" width="20" height="20">
                         </a>
-                        <a href="https://anilist.co/user/Brejela/" target="_blank" rel="noopener" class="social-link glass"
-                            aria-label="AniList">
+                        <a href="https://anilist.co/user/Brejela/" target="_blank" rel="noopener"
+                            class="social-link glass" aria-label="AniList">
                             <img src="https://cdn.simpleicons.org/anilist/white" alt="" width="20" height="20">
                         </a>
                     </div>
@@ -169,102 +173,109 @@
 <span class="code-line">  <span class="token-keyword">await</span> command.execute(channel, username, args, msg);</span>
 <span class="code-line">};</span>
 <span class="code-line"></span></code></pre>
-                        <p class="sr-only">// Twitch chat command handler
-export const commandHandler = async (
-  channel: string,
-  username: string,
-  text: string,
-  msg: CommandMessage
-) => {
-  const [cmd, ...args] = text.trim().split(" ");
+                            <p class="sr-only">// Twitch chat command handler
+                                export const commandHandler = async (
+                                channel: string,
+                                username: string,
+                                text: string,
+                                msg: CommandMessage
+                                ) => {
+                                const [cmd, ...args] = text.trim().split(" ");
 
-  if (isDuplicateMessage(msg.id)) return;
+                                if (isDuplicateMessage(msg.id)) return;
 
-  const command = globalCommands[cmd];
-  if (!command) return;
+                                const command = globalCommands[cmd];
+                                if (!command) return;
 
-  if (checkSpamPatterns(text)) {
-    await banAs(asUser, channel, msg.userId, BanReason.SPAM);
-    return;
-  }
+                                if (checkSpamPatterns(text)) {
+                                await banAs(asUser, channel, msg.userId, BanReason.SPAM);
+                                return;
+                                }
 
-  await command.execute(channel, username, args, msg);
-};
+                                await command.execute(channel, username, args, msg);
+                                };
 
-export default commandHandler;</p>
-                        </div>
+                                export default commandHandler;</p>
                         </div>
                     </div>
                 </div>
-            </section>
+    </div>
+    </section>
 
-            <!-- ===== Featured Project ===== -->
-            <section class="container section">
-                <div class="project-featured glass">
-                    <div class="project-badge">Projeto em destaque</div>
-                    <h2 class="project-title">Botijela</h2>
-                    <p class="project-description">
-                        Bot da Twitch para tradução de mensagens e gerenciamento de filas de espectadores.
-                        Suporta comandos personalizados, integração multi-plataforma (Twitch + Kick),
-                        detecção automática de spam e tradução via Google Cloud Translate.
-                    </p>
-                    <div class="project-stats">
-                        <div class="stat-item">
-                            <span class="stat-value" data-count="15">0</span><span class="stat-suffix" aria-hidden="true">+</span>
-                            <span class="stat-label">Comandos</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-value" data-count="3">0</span>
-                            <span class="stat-label">Plataformas</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-value stat-static">v3.1</span>
-                            <span class="stat-label">Versão</span>
-                        </div>
+    <!-- ===== Featured Project ===== -->
+    <section class="container section">
+        <div class="project-featured glass">
+            <div class="project-badge">Projeto em destaque</div>
+            <h2 class="project-title">Botijela</h2>
+            <p class="project-description">
+                Bot da Twitch para tradução de mensagens e gerenciamento de filas de espectadores.
+                Suporta comandos personalizados, integração multi-plataforma (Twitch + Kick),
+                detecção automática de spam e tradução via Google Cloud Translate.
+            </p>
+            <div class="project-stats">
+                <div class="stat-item">
+                    <div>
+                        <span class="stat-value" data-count="15">0</span>
+                        <span class="stat-suffix" aria-hidden="true">+</span>
                     </div>
-                    <div class="project-links">
-                        <a href="https://twitch.tv/botijela" target="_blank" rel="noopener" class="btn btn-primary">Ver
-                            no Twitch</a>
-                        <a href="https://botijela.brejelinha.net/" target="_blank" rel="noopener"
-                            class="btn btn-secondary glass">Dashboard</a>
-                        <a href="https://botijela.brejelinha.net/wiki/" target="_blank" rel="noopener"
-                            class="btn btn-secondary glass">Documentação</a>
+                    <span class="stat-label">Comandos</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" data-count="3">0</span>
+                    <span class="stat-label">Plataformas</span>
+                </div>
+                <div class="stat-item">
+                    <div>
+                        <span class="stat-value" data-count="100">0</span>
+                        <span class="stat-suffix" aria-hidden="true">+</span>
                     </div>
+                    <span class="stat-label">Canais</span>
                 </div>
-            </section>
+            </div>
+            <div class="project-links">
+                <a href="https://twitch.tv/botijela" target="_blank" rel="noopener" class="btn btn-primary">Ver
+                    no Twitch</a>
+                <a href="https://botijela.brejelinha.net/" target="_blank" rel="noopener"
+                    class="btn btn-secondary glass">Dashboard</a>
+                <a href="https://botijela.brejelinha.net/wiki/" target="_blank" rel="noopener"
+                    class="btn btn-secondary glass">Documentação</a>
+            </div>
+        </div>
+    </section>
 
-            <!-- ===== Projects Link ===== -->
-            <section class="container section section-center">
-                <p class="projects-cta">
-                    Outros projetos no
-                    <a href="https://github.com/PHSebastiao" target="_blank" rel="noopener"
-                        class="link-highlight">GitHub</a>
-                    <span class="projects-cta-separator">·</span>
-                    <a href="https://github.com/Brejelinha" target="_blank" rel="noopener"
-                        class="link-highlight">Brejelinha</a>
-                </p>
-            </section>
+    <!-- ===== Projects Link ===== -->
+    <section class="container section section-center">
+        <p class="projects-cta">
+            Outros projetos no
+            <a href="https://github.com/PHSebastiao" target="_blank" rel="noopener" class="link-highlight">GitHub</a>
+            <span class="projects-cta-separator">·</span>
+            <a href="https://github.com/Brejelinha" target="_blank" rel="noopener" class="link-highlight">Brejelinha</a>
+        </p>
+    </section>
 
-            <!-- ===== Contact ===== -->
-            <section class="container section">
-                <div class="contact glass">
-                    <h3 class="contact-title">Vamos conversar?</h3>
-                    <p class="contact-text">
-                        <a href="mailto:phsilva.sebastiao@gmail.com" id="email-link"
-                            class="link-highlight" title="Clique para copiar">phsilva.sebastiao@gmail.com</a>
-                    </p>
-                    <p class="copy-toast sr-only" id="copy-toast" aria-live="polite"></p>
-                </div>
-            </section>
+    <!-- ===== Contact ===== -->
+    <section class="container section">
+        <div class="contact glass">
+            <h3 class="contact-title">Vamos conversar?</h3>
+            <p class="contact-text">
+                <a href="mailto:phsilva.sebastiao@gmail.com" id="email-link" class="link-highlight"
+                    title="Clique para copiar">phsilva.sebastiao@gmail.com</a>
+            </p>
+            <p class="copy-toast sr-only" id="copy-toast" aria-live="polite"></p>
+        </div>
+    </section>
 
-        </main>
+    </main>
 
-        <footer class="footer">
-            <p>&copy; <span id="current-year">2024</span> Brejelinha. Feito com ❤ e muito café.</p>
-            <p class="status-line" aria-hidden="true"><span class="status-prompt">brejela@portfolio:~$</span> status: <span class="status-online">online</span> <span class="status-cursor">█</span> <span id="uptime"></span></p>
-        </footer>
+    <footer class="footer">
+        <p>&copy; <span id="current-year">2024</span> Brejelinha. Feito com ❤ e muito café.</p>
+        <p class="status-line">status: <span class="status-online">online</span> <span id="uptime"></span></p>
+        <p class="status-line" aria-hidden="true"><span class="status-prompt">brejela@portfolio:~$</span> <span
+                class="status-cursor">█</span></p>
+    </footer>
 
-    <div class="terminal-overlay" id="terminal-overlay" role="dialog" aria-modal="true" aria-label="Terminal secreto" hidden>
+    <div class="terminal-overlay" id="terminal-overlay" role="dialog" aria-modal="true" aria-label="Terminal secreto"
+        hidden>
         <div class="terminal-window">
             <div class="terminal-header">
                 <span class="terminal-title">brejela@portfolio: ~</span>
