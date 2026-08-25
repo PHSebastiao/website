@@ -648,6 +648,14 @@
 .terminal-close:hover {
     color: #fff;
 }
+/* ===== Focus Visible ===== */
+.link-highlight:focus-visible,
+.social-link:focus-visible,
+.btn-secondary:focus-visible,
+.terminal-close:focus-visible {
+    outline: 2px solid #4da3ff;
+    outline-offset: 2px;
+}
 
 .terminal-body {
     padding: 1.25rem;
@@ -727,7 +735,5 @@ a,
 .social-link,
 .tech-item,
 .hero-avatar {
-    cursor:
-        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="%234da3ff" stroke="%23ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s8-10 10-10 10 10 10 10-8 10-10 10S2 12 2 12z"/></svg>'),
-        pointer;
+    cursor: var(--cursor-pointer);
 }

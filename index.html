@@ -105,6 +105,10 @@
                             aria-label="Twitch">
                             <img src="https://cdn.simpleicons.org/twitch/white" alt="" width="20" height="20">
                         </a>
+                        <a href="https://discordapp.com/users/653528165398085642" target="_blank" rel="noopener"
+                            class="social-link glass" aria-label="Discord">
+                            <img src="https://cdn.simpleicons.org/discord/white" alt="" width="20" height="20">
+                        </a>
                         <a href="https://bsky.app/profile/brejelinha.net" target="_blank" rel="noopener"
                             class="social-link glass" aria-label="Bluesky">
                             <img src="https://cdn.simpleicons.org/bluesky/white" alt="" width="20" height="20">
@@ -112,10 +116,6 @@
                         <a href="https://twitter.com/brejelinha" target="_blank" rel="noopener"
                             class="social-link glass" aria-label="X (Twitter)">
                             <img src="https://cdn.simpleicons.org/x/white" alt="" width="20" height="20">
-                        </a>
-                        <a href="https://discordapp.com/users/653528165398085642" target="_blank" rel="noopener"
-                            class="social-link glass" aria-label="Discord">
-                            <img src="https://cdn.simpleicons.org/discord/white" alt="" width="20" height="20">
                         </a>
                         <a href="https://anilist.co/user/Brejela/" target="_blank" rel="noopener"
                             class="social-link glass" aria-label="AniList">
@@ -151,7 +151,7 @@
                             </div>
                         </div>
                         <div class="code-content">
-                            <pre class="code-block"><code class="language-ts"><span class="code-line"><span class="token-comment">// Twitch chat command handler</span></span>
+                            <pre class="code-block" aria-hidden="true"><code class="language-ts"><span class="code-line"><span class="token-comment">// Twitch chat command handler</span></span>
 <span class="code-line"><span class="token-keyword">export</span> <span class="token-keyword">const</span> <span class="token-function">commandHandler</span> = <span class="token-keyword">async</span> (</span>
 <span class="code-line">  channel: <span class="token-type">string</span>,</span>
 <span class="code-line">  username: <span class="token-type">string</span>,</span>
@@ -199,91 +199,92 @@
                         </div>
                     </div>
                 </div>
-    </div>
-    </section>
+            </section>
 
-    <!-- ===== Featured Project ===== -->
-    <section class="container section">
-        <div class="project-featured glass">
-            <div class="project-badge">Projeto em destaque</div>
-            <h2 class="project-title">Botijela</h2>
-            <p class="project-description">
-                Bot da Twitch para tradução de mensagens e gerenciamento de filas de espectadores.
-                Suporta comandos personalizados, integração multi-plataforma (Twitch + Kick),
-                detecção automática de spam e tradução via Google Cloud Translate.
-            </p>
-            <div class="project-stats">
-                <div class="stat-item">
-                    <div>
-                        <span class="stat-value" data-count="15">0</span>
-                        <span class="stat-suffix" aria-hidden="true">+</span>
+            <!-- ===== Featured Project ===== -->
+            <section class="container section">
+                <div class="project-featured glass">
+                    <div class="project-badge">Projeto em destaque</div>
+                    <h2 class="project-title">Botijela</h2>
+                    <p class="project-description">
+                        Bot da Twitch para tradução de mensagens e gerenciamento de filas de espectadores.
+                        Suporta comandos personalizados, integração multi-plataforma (Twitch + Kick),
+                        detecção automática de spam e tradução via Google Cloud Translate.
+                    </p>
+                    <div class="project-stats">
+                        <div class="stat-item">
+                            <div>
+                                <span class="stat-value" data-count="15">15</span>
+                                <span class="stat-suffix" aria-hidden="true">+</span>
+                            </div>
+                            <span class="stat-label">Comandos</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" data-count="3">3</span>
+                            <span class="stat-label">Plataformas</span>
+                        </div>
+                        <div class="stat-item">
+                            <div>
+                                <span class="stat-value" data-count="100">100</span>
+                                <span class="stat-suffix" aria-hidden="true">+</span>
+                            </div>
+                            <span class="stat-label">Canais</span>
+                        </div>
                     </div>
-                    <span class="stat-label">Comandos</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-value" data-count="3">0</span>
-                    <span class="stat-label">Plataformas</span>
-                </div>
-                <div class="stat-item">
-                    <div>
-                        <span class="stat-value" data-count="100">0</span>
-                        <span class="stat-suffix" aria-hidden="true">+</span>
+                    <div class="project-links">
+                        <a href="https://twitch.tv/botijela" target="_blank" rel="noopener" class="btn btn-primary">Ver
+                            na Twitch</a>
+                        <a href="https://botijela.brejelinha.net/" target="_blank" rel="noopener"
+                            class="btn btn-secondary glass">Dashboard</a>
+                        <a href="https://botijela.brejelinha.net/wiki/" target="_blank" rel="noopener"
+                            class="btn btn-secondary glass">Documentação</a>
                     </div>
-                    <span class="stat-label">Canais</span>
                 </div>
-            </div>
-            <div class="project-links">
-                <a href="https://twitch.tv/botijela" target="_blank" rel="noopener" class="btn btn-primary">Ver
-                    no Twitch</a>
-                <a href="https://botijela.brejelinha.net/" target="_blank" rel="noopener"
-                    class="btn btn-secondary glass">Dashboard</a>
-                <a href="https://botijela.brejelinha.net/wiki/" target="_blank" rel="noopener"
-                    class="btn btn-secondary glass">Documentação</a>
+            </section>
+
+            <!-- ===== Projects Link ===== -->
+            <section class="container section section-center">
+                <p class="projects-cta">
+                    Outros projetos no
+                    <a href="https://github.com/PHSebastiao" target="_blank" rel="noopener"
+                        class="link-highlight">GitHub</a>
+                    <span class="projects-cta-separator">·</span>
+                    <a href="https://github.com/Brejelinha" target="_blank" rel="noopener"
+                        class="link-highlight">Brejelinha</a>
+                </p>
+            </section>
+
+            <!-- ===== Contact ===== -->
+            <section class="container section">
+                <div class="contact glass">
+                    <h3 class="contact-title">Vamos conversar?</h3>
+                    <p class="contact-text">
+                        <a href="mailto:phsilva.sebastiao@gmail.com" id="email-link" class="link-highlight"
+                            title="Clique para copiar">phsilva.sebastiao@gmail.com</a>
+                    </p>
+                    <p class="copy-toast sr-only" id="copy-toast" aria-live="polite"></p>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="footer">
+            <p>&copy; <span id="current-year">2024</span> Brejelinha. Feito com ❤ e muito café.</p>
+            <p class="status-line">status: <span class="status-online">online</span> <span id="uptime"></span></p>
+            <p class="status-line" aria-hidden="true"><span class="status-prompt">brejela@portfolio:~$</span> <span
+                    class="status-cursor">█</span></p>
+        </footer>
+
+        <div class="terminal-overlay" id="terminal-overlay" role="dialog" aria-modal="true"
+            aria-label="Terminal secreto" hidden>
+            <div class="terminal-window">
+                <div class="terminal-header">
+                    <span class="terminal-title">brejela@portfolio: ~</span>
+                    <button class="terminal-close" id="terminal-close" aria-label="Fechar terminal">×</button>
+                </div>
+                <div class="terminal-body" id="terminal-body" tabindex="-1"></div>
             </div>
         </div>
-    </section>
-
-    <!-- ===== Projects Link ===== -->
-    <section class="container section section-center">
-        <p class="projects-cta">
-            Outros projetos no
-            <a href="https://github.com/PHSebastiao" target="_blank" rel="noopener" class="link-highlight">GitHub</a>
-            <span class="projects-cta-separator">·</span>
-            <a href="https://github.com/Brejelinha" target="_blank" rel="noopener" class="link-highlight">Brejelinha</a>
-        </p>
-    </section>
-
-    <!-- ===== Contact ===== -->
-    <section class="container section">
-        <div class="contact glass">
-            <h3 class="contact-title">Vamos conversar?</h3>
-            <p class="contact-text">
-                <a href="mailto:phsilva.sebastiao@gmail.com" id="email-link" class="link-highlight"
-                    title="Clique para copiar">phsilva.sebastiao@gmail.com</a>
-            </p>
-            <p class="copy-toast sr-only" id="copy-toast" aria-live="polite"></p>
-        </div>
-    </section>
-
-    </main>
-
-    <footer class="footer">
-        <p>&copy; <span id="current-year">2024</span> Brejelinha. Feito com ❤ e muito café.</p>
-        <p class="status-line">status: <span class="status-online">online</span> <span id="uptime"></span></p>
-        <p class="status-line" aria-hidden="true"><span class="status-prompt">brejela@portfolio:~$</span> <span
-                class="status-cursor">█</span></p>
-    </footer>
-
-    <div class="terminal-overlay" id="terminal-overlay" role="dialog" aria-modal="true" aria-label="Terminal secreto"
-        hidden>
-        <div class="terminal-window">
-            <div class="terminal-header">
-                <span class="terminal-title">brejela@portfolio: ~</span>
-                <button class="terminal-close" id="terminal-close" aria-label="Fechar terminal">×</button>
-            </div>
-            <div class="terminal-body" id="terminal-body" tabindex="-1"></div>
-        </div>
-    </div>
 
     </div>
 

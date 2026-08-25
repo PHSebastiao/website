@@ -7,11 +7,15 @@
     --bg: #0a0a0f;
     --glass-alpha: 0.6;
     --glass-blur: 10px;
+    --cursor-default: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%234da3ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s8-10 10-10 10 10 10 10-8 10-10 10S2 12 2 12z"/></svg>'),
+        auto;
+    --cursor-pointer: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="%234da3ff" stroke="%23ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s8-10 10-10 10 10 10 10-8 10-10 10S2 12 2 12z"/></svg>'),
+        pointer;
 }
 
 .glass {
-    background: rgba(var(--surface), var(--glass-alpha, 0.6));
-    backdrop-filter: blur(var(--glass-blur, 10px));
+    background: rgba(var(--surface), var(--glass-alpha));
+    backdrop-filter: blur(var(--glass-blur));
     border: 1px solid rgba(var(--border), 0.8);
 }
 
@@ -37,6 +41,7 @@
 html {
     scrollbar-color: rgba(var(--accent-channel), 0.4) var(--bg);
     scrollbar-width: thin;
+    scroll-behavior: smooth;
 }
 
 /* ===== Reset & Base ===== */
@@ -46,10 +51,6 @@ html {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-}
-
-html {
-    scroll-behavior: smooth;
 }
 
 body {
@@ -67,9 +68,7 @@ body {
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
-    cursor:
-        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%234da3ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s8-10 10-10 10 10 10 10-8 10-10 10S2 12 2 12z"/></svg>'),
-        auto;
+    cursor: var(--cursor-default);
 }
 
 img {
@@ -126,24 +125,21 @@ ul {
 
 .section {
     padding: 4rem 1.5rem;
-    opacity: 0;
-    transform: translateY(20px);
     transition: all 0.6s ease;
 }
 
-.section.visible {
+html.js .section {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+html.js .section.visible {
     opacity: 1;
     transform: translateY(0);
 }
 
 .section-center {
     text-align: center;
-}
-
-/* ===== Intersection Observer for animations ===== */
-.no-js .section {
-    opacity: 1;
-    transform: none;
 }
 
 /* ===== Screen Reader Only ===== */
