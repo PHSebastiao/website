@@ -101,7 +101,7 @@ ul {
     flex-wrap: wrap;
     padding: 2rem;
     gap: 1rem;
-    opacity: 0.03;
+    opacity: 0.6;
     font-family: "Fira Code", "Courier New", monospace;
     font-size: 0.8rem;
     pointer-events: none;
@@ -110,6 +110,7 @@ ul {
 .particle {
     color: #4da3ff;
     animation: float 20s infinite linear;
+    animation-fill-mode: backwards;
 }
 
 .particle:nth-child(1) {
@@ -151,11 +152,11 @@ ul {
 
 @keyframes float {
     0% {
-        transform: translateY(0) rotate(0deg);
+        transform: translateY(100vh) rotate(0deg);
         opacity: 0;
     }
     10% {
-        opacity: 0.03;
+        opacity: 0.6;
     }
     100% {
         transform: translateY(-100vh) rotate(360deg);
