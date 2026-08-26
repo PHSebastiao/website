@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://brejelinha.dev/sitemap.xml
+Sitemap: https://brejelinha.net/sitemap.xml
