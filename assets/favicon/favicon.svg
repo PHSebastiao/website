@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" id="Camada_2" viewBox="0 0 129.33 128" width="129.33" height="128"><defs>
+    <style>
+      .st0 {
+        fill: url(#Gradiente_sem_nome_39);
+      }
+
+      .st1 {
+        fill: none;
+        stroke: url(#Nova_amostra_de_gradiente_2);
+        stroke-miterlimit: 10;
+        stroke-width: 7px;
+      }
+    </style>
+    <linearGradient id="Nova_amostra_de_gradiente_2" data-name="Nova amostra de gradiente 2" x1="385.26" y1="-284.07" x2="385.26" y2="-397.55" gradientTransform="translate(33.24 577.41) rotate(-45)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#59819f"></stop>
+      <stop offset=".98" stop-color="#3e2b8e"></stop>
+    </linearGradient>
+    <linearGradient id="Gradiente_sem_nome_39" data-name="Gradiente sem nome 39" x1="395.68" y1="-278.52" x2="396.36" y2="-313.99" gradientTransform="translate(147.09 -486.43) rotate(136.1) scale(1.15) skewX(2.19)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#59819f"></stop>
+      <stop offset=".98" stop-color="#3e2b8e"></stop>
+    </linearGradient>
+  </defs><rect class="st1" x="21.77" y="22.71" width="85.79" height="82.57" rx="15.16" ry="15.16" transform="translate(-26.31 64.47) rotate(-45)"></rect><rect class="st0" x="47.29" y="47.27" width="34.75" height="33.45" rx="9.14" ry="9.14" transform="translate(155.65 63.53) rotate(135)"></rect></svg>
