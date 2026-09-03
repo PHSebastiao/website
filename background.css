@@ -52,6 +52,7 @@
         radial-gradient(circle, var(--aurora-color2, rgba(139, 92, 246, 0.2)) 0%, transparent 80%);
     background-size: 100% 100%;
     animation: aurora-pulse 8s ease-in-out infinite;
+    will-change: transform, opacity; /* composited pulse: no page repaint */
 }
 
 @keyframes aurora-pulse {
@@ -70,12 +71,13 @@
 .aurora-blobs {
     mix-blend-mode: screen;
     animation: aurora-fadein 1s ease-in-out both;
+    transform: translateZ(0); /* own compositor layer: blobs animate without repainting the page */
 }
 
 .aurora-blob {
     position: absolute;
     border-radius: 50%;
-    filter: blur(64px);
+    filter: blur(40px);
     will-change: transform;
 }
 
@@ -189,5 +191,44 @@
     .aurora-star {
         opacity: 0.35;
     }
+}
+
+/* ===== Software rendering fallback (GPU acceleration off) =====
+   Blur + blend + large animated surfaces are the CPU killers.
+   Static gradient stand-in for the whole aurora; no per-frame work. */
+html.low-end .aurora-gradient {
+    animation: none;
+    opacity: 0.5;
+    will-change: auto;
+}
+
+html.low-end .aurora-blobs {
+    animation: none;
+    mix-blend-mode: normal;
+    transform: none;
+}
+
+html.low-end .aurora-blob {
+    filter: blur(48px);
+    will-change: auto;
+    animation: none;
+    /* Park the blobs where they read best, motionless */
+}
+
+html.low-end .blob-purple {
+    transform: translate(0, 0) scale(1.1);
+}
+
+html.low-end .blob-fuchsia {
+    transform: translate(0, 0) scale(1.15);
+}
+
+html.low-end .blob-indigo {
+    transform: translate(0, 0);
+}
+
+html.low-end .aurora-star {
+    animation: none;
+    opacity: 0.3;
 }
 

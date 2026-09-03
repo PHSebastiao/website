@@ -1,18 +1,45 @@
 // ===== Single source of truth for motion preference =====
 const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// ===== Detect software rendering (GPU acceleration off) =====
+// Fast heuristic + capability probe; async refinement after boot.
+const LOW_END = detectSoftwareRendering();
+
+function detectSoftwareRendering() {
+    // SwiftShader/SwiftGL/software strings in the WebGL renderer
+    try {
+        const canvas = document.createElement('canvas');
+        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+        if (gl) {
+            const ext = gl.getExtension('WEBGL_debug_renderer_info');
+            if (ext) {
+                const renderer = (gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) || '').toLowerCase();
+                if (/swiftshader|software|basic render|llvmpipe|softpipe/.test(renderer)) {
+                    return true;
+                }
+            }
+        }
+    } catch (e) { /* fall through to heuristics */ }
+
+    // Heuristic fallbacks: few cores or device memory hint
+    if (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2) return true;
+    if (navigator.deviceMemory && navigator.deviceMemory <= 2) return true;
+    return false;
+}
+
 // ===== Boot =====
-document.addEventListener('DOMContentLoaded', boot);
+document.addEventListener('DOMContentLoaded', function () {
+    if (LOW_END) document.documentElement.classList.add('low-end');
+    boot();
+});
 
 function boot() {
     initYear();
     initTyping();
     initScrollProgress();
     initReveal();
-    initCodeWindow();
-    initStats();
     initAuroraStars();
-    initCursorFx();
+    if (!LOW_END) initCursorFx();
     initContact();
     initTerminal();
 }
@@ -223,7 +250,7 @@ function initAuroraStars() {
     const starLayer = document.querySelector('.aurora-stars');
     if (!starLayer) return;
 
-    const STAR_COUNT = 80;
+    const STAR_COUNT = LOW_END ? 40 : 80;
     const frag = document.createDocumentFragment();
 
     for (let i = 0; i < STAR_COUNT; i++) {
@@ -241,7 +268,7 @@ function initAuroraStars() {
         star.style.left = fx.toFixed(2) + 'vw';
         star.style.top = fy.toFixed(2) + 'vh';
 
-        if (!REDUCED) {
+        if (!REDUCED && !LOW_END) {
             // Twinkle envelope: 2–5s cycle, up to 0.8 peak, up to 5s delay
             const dur = (Math.random() * 3 + 2).toFixed(2);
             const delay = (Math.random() * 5).toFixed(2);
@@ -249,7 +276,7 @@ function initAuroraStars() {
             star.style.setProperty('--peak', peak);
             star.style.animation = 'aurora-twinkle ' + dur + 's ease-in-out ' + delay + 's infinite';
         } else {
-            star.style.opacity = '0.35';
+            star.style.opacity = LOW_END ? '0.3' : '0.35';
         }
         frag.appendChild(star);
     }
@@ -301,6 +328,7 @@ function initCursorFx() {
     }
 
 
+
     function animate() {
         cursorX = lerp(cursorX, targetX, 0.08);
         cursorY = lerp(cursorY, targetY, 0.08);
@@ -324,6 +352,7 @@ function initCursorFx() {
 
         // Stars: gentle pull toward the cursor (twinkle keeps running via CSS)
         if (starLayer) {
+            let active = 0;
             for (let j = 0; j < starLayer.children.length; j++) {
                 const star = starLayer.children[j];
                 const sx = star.__ax + star.__ox;
@@ -340,7 +369,15 @@ function initCursorFx() {
                 }
                 star.__ox += (tx - star.__ox) * 0.12;
                 star.__oy += (ty - star.__oy) * 0.12;
-                star.style.translate = star.__ox.toFixed(2) + 'px ' + star.__oy.toFixed(2) + 'px';
+                // Skip the style write once the star has settled at rest
+                if (Math.abs(star.__ox) > 0.05 || Math.abs(star.__oy) > 0.05) {
+                    star.style.translate = star.__ox.toFixed(2) + 'px ' + star.__oy.toFixed(2) + 'px';
+                    active++;
+                } else if (star.__ox !== 0 || star.__oy !== 0) {
+                    star.__ox = 0;
+                    star.__oy = 0;
+                    star.style.translate = '0px 0px';
+                }
             }
         }
 
