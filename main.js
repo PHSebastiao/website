@@ -11,7 +11,7 @@ function boot() {
     initReveal();
     initCodeWindow();
     initStats();
-    initParticles();
+    initAuroraStars();
     initCursorFx();
     initContact();
     initTerminal();
@@ -217,23 +217,54 @@ function initStats() {
     });
 }
 
-// ===== Randomized particle drift =====
-function initParticles() {
-    if (REDUCED) return;
 
-    const particles = document.querySelectorAll('.particle');
-    for (const p of particles) {
-        const floatDur = 14 + Math.random() * 12;   // 14–26s
-        const swayDur = 5 + Math.random() * 6;      // 5–11s
-        const swayAmp = Math.round(15 + Math.random() * 30) + 'px'; // 15–45px
-        p.style.animationDuration = floatDur.toFixed(1) + 's, ' + swayDur.toFixed(1) + 's';
-        p.style.animationDelay = (-Math.random() * floatDur).toFixed(1) + 's, ' + (-Math.random() * swayDur).toFixed(1) + 's';
-        p.style.setProperty('--sway', swayAmp);
-        if (Math.random() < 0.5) {
-            p.style.animationDirection = 'normal, reverse';
+// ===== Aurora star field (80 twinkling stars, like the original) =====
+function initAuroraStars() {
+    const starLayer = document.querySelector('.aurora-stars');
+    if (!starLayer) return;
+
+    const STAR_COUNT = 80;
+    const frag = document.createDocumentFragment();
+
+    for (let i = 0; i < STAR_COUNT; i++) {
+        const star = document.createElement('div');
+        star.className = 'aurora-star';
+        // Position in vw/vh like the original translateX/Y — scales with viewport
+        const fx = Math.random() * 100;
+        const fy = Math.random() * 100;
+        star.__fx = fx;
+        star.__fy = fy;
+        star.__ax = (fx / 100) * window.innerWidth;
+        star.__ay = (fy / 100) * window.innerHeight;
+        star.__ox = 0;
+        star.__oy = 0;
+        star.style.left = fx.toFixed(2) + 'vw';
+        star.style.top = fy.toFixed(2) + 'vh';
+
+        if (!REDUCED) {
+            // Twinkle envelope: 2–5s cycle, up to 0.8 peak, up to 5s delay
+            const dur = (Math.random() * 3 + 2).toFixed(2);
+            const delay = (Math.random() * 5).toFixed(2);
+            const peak = (Math.random() * 0.8).toFixed(2);
+            star.style.setProperty('--peak', peak);
+            star.style.animation = 'aurora-twinkle ' + dur + 's ease-in-out ' + delay + 's infinite';
+        } else {
+            star.style.opacity = '0.35';
         }
+        frag.appendChild(star);
     }
+
+    starLayer.appendChild(frag);
 }
+
+// Keep star absolute coords in sync with the viewport for the cursor pull
+window.addEventListener('resize', function () {
+    const stars = document.querySelectorAll('.aurora-star');
+    for (const s of stars) {
+        s.__ax = (s.__fx / 100) * window.innerWidth;
+        s.__ay = (s.__fy / 100) * window.innerHeight;
+    }
+}, { passive: true });
 
 // ===== Cursor interactivity =====
 function initCursorFx() {
@@ -242,12 +273,14 @@ function initCursorFx() {
     const bgAnim = document.querySelector('.background-animation');
     if (!bgAnim) return;
 
-    const orbWrappers = bgAnim.querySelectorAll('.orb-wrapper');
-    const particleWrappers = bgAnim.querySelectorAll('.particle-wrapper');
+    const blobLayer = bgAnim.querySelector('.aurora-blobs');
+    const gradientLayer = bgAnim.querySelector('.aurora-gradient');
+    const starLayer = bgAnim.querySelector('.aurora-stars');
     const cursorGlow = document.querySelector('.cursor-glow');
-    const REPEL_RADIUS = 180;
-    const REPEL_STRENGTH = 35;
-    const ORB_PARALLAX_MAX = 20;
+    const BLOB_PARALLAX_MAX = 24;
+    const GRADIENT_PARALLAX_MAX = 12;
+    const STAR_RADIUS = 130;
+    const STAR_PULL = 26;
     let targetX = window.innerWidth / 2;
     let targetY = window.innerHeight / 2;
     let cursorX = window.innerWidth / 2;
@@ -267,13 +300,6 @@ function initCursorFx() {
         return a + (b - a) * t;
     }
 
-    function repel(dx, dy, dist) {
-        if (dist >= REPEL_RADIUS || dist <= 1) {
-            return { x: 0, y: 0 };
-        }
-        const force = (1 - dist / REPEL_RADIUS) * REPEL_STRENGTH;
-        return { x: (dx / dist) * force, y: (dy / dist) * force };
-    }
 
     function animate() {
         cursorX = lerp(cursorX, targetX, 0.08);
@@ -283,46 +309,39 @@ function initCursorFx() {
         if (cursorGlow) {
             cursorGlow.style.transform = 'translate3d(' + cursorX.toFixed(1) + 'px,' + cursorY.toFixed(1) + 'px,0)';
         }
-
-        // Particles repulsion
-        for (let i = 0; i < particleWrappers.length; i++) {
-            const wrapper = particleWrappers[i];
-            const inner = wrapper.querySelector('.particle');
-            const rect = inner.getBoundingClientRect();
-            const px = rect.left + rect.width / 2;
-            const py = rect.top + rect.height / 2;
-            const dx = px - cursorX;
-            const dy = py - cursorY;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-
-            const r = repel(dx, dy, dist);
-            if (r.x !== 0 || r.y !== 0) {
-                wrapper.style.transform = 'translate(' + r.x.toFixed(1) + 'px,' + r.y.toFixed(1) + 'px)';
-            } else {
-                wrapper.style.transform = '';
-            }
-        }
-
-        // Orbs parallax (opposite to cursor, subtle) + repulsion
+        // Aurora parallax: gradient and blobs drift subtly opposite the cursor
         const centerX = window.innerWidth / 2;
         const centerY = window.innerHeight / 2;
-        for (let j = 0; j < orbWrappers.length; j++) {
-            const orb = orbWrappers[j];
-            const ratio = Number(orb.getAttribute('data-parallax')) || 1;
-            let offsetX = -((cursorX - centerX) / centerX) * ORB_PARALLAX_MAX * ratio;
-            let offsetY = -((cursorY - centerY) / centerY) * ORB_PARALLAX_MAX * ratio;
+        const nx = (cursorX - centerX) / centerX;
+        const ny = (cursorY - centerY) / centerY;
 
-            const orbRect = orb.getBoundingClientRect();
-            const orbCx = orbRect.left + orbRect.width / 2;
-            const orbCy = orbRect.top + orbRect.height / 2;
-            const orbDx = orbCx - cursorX;
-            const orbDy = orbCy - cursorY;
-            const orbDist = Math.sqrt(orbDx * orbDx + orbDy * orbDy);
-            const r = repel(orbDx, orbDy, orbDist);
-            offsetX += r.x;
-            offsetY += r.y;
+        if (gradientLayer) {
+            gradientLayer.style.translate = (nx * GRADIENT_PARALLAX_MAX).toFixed(2) + 'px ' + (ny * GRADIENT_PARALLAX_MAX).toFixed(2) + 'px';
+        }
+        if (blobLayer) {
+            blobLayer.style.translate = (-nx * BLOB_PARALLAX_MAX).toFixed(2) + 'px ' + (-ny * BLOB_PARALLAX_MAX).toFixed(2) + 'px';
+        }
 
-            orb.style.transform = 'translate(' + offsetX.toFixed(2) + 'px,' + offsetY.toFixed(2) + 'px)';
+        // Stars: gentle pull toward the cursor (twinkle keeps running via CSS)
+        if (starLayer) {
+            for (let j = 0; j < starLayer.children.length; j++) {
+                const star = starLayer.children[j];
+                const sx = star.__ax + star.__ox;
+                const sy = star.__ay + star.__oy;
+                const dx = cursorX - sx;
+                const dy = cursorY - sy;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                let tx = 0;
+                let ty = 0;
+                if (dist < STAR_RADIUS && dist > 1) {
+                    const force = (1 - dist / STAR_RADIUS) * STAR_PULL;
+                    tx = (dx / dist) * force;
+                    ty = (dy / dist) * force;
+                }
+                star.__ox += (tx - star.__ox) * 0.12;
+                star.__oy += (ty - star.__oy) * 0.12;
+                star.style.translate = star.__ox.toFixed(2) + 'px ' + star.__oy.toFixed(2) + 'px';
+            }
         }
 
         requestAnimationFrame(animate);

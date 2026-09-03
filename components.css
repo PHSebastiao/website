@@ -689,7 +689,10 @@
     color: #9a9aac;
     font-size: 0.85rem;
     margin-top: auto;
-    border-top: 1px solid rgba(var(--surface), 0.8);
+    background: rgba(var(--surface), var(--glass-alpha));
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-top: 1px solid rgba(var(--border), 0.8);
 }
 
 /* ===== Responsive ===== */
