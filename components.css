@@ -292,6 +292,13 @@
     font-size: 0.85rem;
     line-height: 1.6;
     color: #c0c0d0;
+    /* Inter-line newlines in the source collapse away; each .code-line
+       preserves its own internal spacing as a block. */
+    white-space: normal;
+}
+
+.code-line {
+    display: block;
     white-space: pre;
 }
 
@@ -309,6 +316,9 @@
 @media (prefers-reduced-motion: no-preference) {
     html.js .code-line {
         opacity: 0;
+        /* Reserve the line box even when hidden: the block keeps its full
+           height for the whole cycle, so the page never shifts. */
+        min-height: 1.6em;
     }
 
     html.js .code-line.visible {

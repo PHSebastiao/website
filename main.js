@@ -36,8 +36,9 @@ document.addEventListener('DOMContentLoaded', function () {
 function boot() {
     initYear();
     initTyping();
-    initScrollProgress();
     initReveal();
+    initCodeWindow();
+    initStats();
     initAuroraStars();
     if (!LOW_END) initCursorFx();
     initContact();
