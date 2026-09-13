@@ -11,10 +11,13 @@
        // plexus => { start, stop, destroy } — or null when reduced/lowEnd
 
    What this layer guarantees:
-     • transparent canvas (clearRect every frame); the host page owns the bg
+     • transparent canvas (clearRect each frame); the host page owns the bg
+     • full-document field: the bitmap and the node field cover the whole page
+       and scroll with it; only the viewport band (±60px) is drawn each frame
      • touches only the canvas it was handed; registers ZERO mousemove listeners
      • budgets: desktop 65 nodes / R=150 / edge cap 220
                 innerWidth < 640 → 34 nodes / R=110 / edge cap 100
+                scaled ×1–3 by page-height / viewport-height
      • DPR capped at 1.5 (the 1px links stay crisp, the fill rate stays sane)
      • deterministic seeded layout (stable per load), drift 6–10 px/s + bounce
      • grid-hash neighbour scan (cell = R), preallocated Float32Arrays, zero
@@ -25,9 +28,12 @@
        each colour pass needs a handful of strokes instead of a stroke per link
      • one zap at a time: random live link every 2800 ± 1200 ms, ~900 ms
        traverse, near-white 1.5px segment at alpha 0.9, no shadowBlur
-     • cursor: gentle node pull inside 130px, same math as the site stars
+     • cursor: gentle node pull inside 130px, same math as the site stars,
+       viewport cursor shifted into document space by the scroll offset
      • sleeps (cancels the rAF) when the tab is hidden or the canvas is
-       offscreen; 150ms debounced resize re-seeds positions
+       offscreen; 150ms debounced resize re-seeds only when the node count
+       changes or height moves >25%; a ResizeObserver on <html> catches
+       content growth without a window resize
    ========================================================================== */
 
 (function (global) {
@@ -40,9 +46,16 @@
     var PRESET_DESKTOP = { nodes: 65, radius: 150, edgeCap: 220 };
     var PRESET_SMALL = { nodes: 34, radius: 110, edgeCap: 100 };
     var SMALL_WIDTH = 640;
+    var MAX_HEIGHT_FACTOR = 3;          // page height / viewport height, capped
+
+    /* Full-document canvas: density scales with page height, so the arrays
+       hold the worst case (desktop preset × MAX_HEIGHT_FACTOR). */
+    var MAX_NODES = PRESET_DESKTOP.nodes * MAX_HEIGHT_FACTOR;   // 195
+    var MAX_EDGES = PRESET_DESKTOP.edgeCap * MAX_HEIGHT_FACTOR; // 660
 
     var DPR_CAP = 1.5;
     var MARGIN = 8;                     // keep nodes off the exact canvas edge
+    var CULL_MARGIN = 60;               // px of overscan around the viewport band
 
     var DRIFT_MIN = 6;                  // px/s
     var DRIFT_MAX = 10;
@@ -130,9 +143,6 @@
 
         /* -- state: all preallocated, the frame loop allocates nothing ------ */
 
-        var MAX_NODES = PRESET_DESKTOP.nodes;
-        var MAX_EDGES = PRESET_DESKTOP.edgeCap;
-
         var px = new Float32Array(MAX_NODES);
         var py = new Float32Array(MAX_NODES);
         var vx = new Float32Array(MAX_NODES);
@@ -160,12 +170,16 @@
 
         var w = 1;
         var h = 1;
+        var vh = 1;                     // viewport height, refreshed in resize()
         var dpr = 1;
         var preset = PRESET_DESKTOP;
         var radius = preset.radius;
         var radius2 = radius * radius;
         var edgeCap = preset.edgeCap;
         var nodeCount = preset.nodes;
+        var lastSeedH = 0;              // document height at the last seed
+        var lastSeedCount = -1;         // node count at the last seed
+        var seeded = false;
 
         var rng = makeRng(SEED);
 
@@ -218,18 +232,31 @@
                 twFreq[i] = TAU / (tSec * 1000);        // rad/ms (rAF now is ms)
                 twPeak[i] = 0.2 + r() * 0.6;            // 0.2–0.8 envelope
             }
+            lastSeedH = h;
+            lastSeedCount = nodeCount;
+            seeded = true;
         }
 
         function resize() {
             var rect = canvas.getBoundingClientRect();
             w = rect.width || canvas.clientWidth || win.innerWidth || 1;
             h = rect.height || canvas.clientHeight || win.innerHeight || 1;
+            vh = win.innerHeight || 1;
 
             preset = win.innerWidth < SMALL_WIDTH ? PRESET_SMALL : PRESET_DESKTOP;
             radius = preset.radius;
             radius2 = radius * radius;
-            edgeCap = preset.edgeCap;
-            nodeCount = preset.nodes;
+
+            /* Full page: scale node/edge budgets with page-height ratio. */
+            var factor = h / vh;
+            if (factor < 1) factor = 1;
+            else if (factor > MAX_HEIGHT_FACTOR) factor = MAX_HEIGHT_FACTOR;
+            var nextCount = Math.round(preset.nodes * factor);
+            var nextCap = Math.round(preset.edgeCap * factor);
+            if (nextCount > MAX_NODES) nextCount = MAX_NODES;
+            if (nextCap > MAX_EDGES) nextCap = MAX_EDGES;
+            nodeCount = nextCount;
+            edgeCap = nextCap;
 
             dpr = Math.min(win.devicePixelRatio || 1, DPR_CAP);
             var bw = Math.max(1, Math.round(w * dpr));
@@ -239,6 +266,14 @@
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
             buildGrid();
+
+            /* Re-seed only on node-count change or a >25% height delta;
+               otherwise keep the field and just resize the bitmap/grid. */
+            if (!seeded ||
+                nodeCount !== lastSeedCount ||
+                Math.abs(h - lastSeedH) > lastSeedH * 0.25) {
+                seedNodes();
+            }
         }
 
         /* -- lifecycle -------------------------------------------------------- */
@@ -271,8 +306,7 @@
             resizeTimer = win.setTimeout(function () {
                 resizeTimer = 0;
                 if (destroyed) return;
-                resize();
-                seedNodes();                    // deterministic re-seed on resize
+                resize();                       // re-seeds only per the seed policy
                 zapA = -1;
                 zapB = -1;
                 nextZapAt = -1;
@@ -318,12 +352,19 @@
             }
             lastNow = now;
 
-            /* Cursor is read-only and polled once per frame — no listeners. */
+            /* Viewport band in document coords (cheap reads, zero listeners). */
+            var viewTop = win.scrollY || win.pageYOffset || 0;
+            var viewBottom = viewTop + (win.innerHeight || vh || 1);
+            var bandTop = viewTop - CULL_MARGIN;
+            var bandBottom = viewBottom + CULL_MARGIN;
+
+            /* Cursor is read-only and polled once per frame — no listeners.
+               getCursor() is viewport-relative, so shift it into doc space. */
             if (getCursor) {
                 var cur = getCursor();
                 if (cur) {
                     cursorX = cur.x;
-                    cursorY = cur.y;
+                    cursorY = cur.y + viewTop;
                     cursorSeen = true;
                 } else {
                     cursorSeen = false;
@@ -426,26 +467,32 @@
                             var d2e = ex * ex + ey * ey;
                             if (d2e > radius2) continue;
 
-                            var q = 1 - Math.sqrt(d2e) / radius;
-                            var a = Math.pow(q, EDGE_FALLOFF); // (1-d/R)^1.8
-                            var lvl = (a * ALPHA_LEVELS) | 0;
-                            if (lvl >= ALPHA_LEVELS) lvl = ALPHA_LEVELS - 1;
+                            /* Full-field live list (zap/cursor math stays global);
+                               only in-band links are batched for drawing. */
+                            var inBand = !(yi < bandTop && jy < bandTop) &&
+                                         !(yi > bandBottom && jy > bandBottom);
+                            if (inBand) {
+                                var q = 1 - Math.sqrt(d2e) / radius;
+                                var a = Math.pow(q, EDGE_FALLOFF); // (1-d/R)^1.8
+                                var lvl = (a * ALPHA_LEVELS) | 0;
+                                if (lvl >= ALPHA_LEVELS) lvl = ALPHA_LEVELS - 1;
 
-                            var segs;
-                            var counts;
-                            if (linkIsTeal(i, j)) {
-                                segs = segTeal;
-                                counts = countTeal;
-                            } else {
-                                segs = segPurple;
-                                counts = countPurple;
+                                var segs;
+                                var counts;
+                                if (linkIsTeal(i, j)) {
+                                    segs = segTeal;
+                                    counts = countTeal;
+                                } else {
+                                    segs = segPurple;
+                                    counts = countPurple;
+                                }
+                                var slot = (lvl * edgeCap + counts[lvl]) * 4;
+                                segs[slot] = xi;
+                                segs[slot + 1] = yi;
+                                segs[slot + 2] = jx;
+                                segs[slot + 3] = jy;
+                                counts[lvl] = counts[lvl] + 1;
                             }
-                            var slot = (lvl * edgeCap + counts[lvl]) * 4;
-                            segs[slot] = xi;
-                            segs[slot + 1] = yi;
-                            segs[slot + 2] = jx;
-                            segs[slot + 3] = jy;
-                            counts[lvl] = counts[lvl] + 1;
 
                             liveA[liveCount] = i;
                             liveB[liveCount] = j;
@@ -457,7 +504,9 @@
 
             /* -- pass 1: links (purple pass, then teal pass) + nodes ---------- */
 
-            clearCanvas();
+            /* Clear only the visible band; pixels outside it are never seen and
+               a later scroll into them clears the band again anyway. */
+            ctx.clearRect(0, bandTop, w, bandBottom - bandTop);
             ctx.lineWidth = EDGE_WIDTH;
 
             for (c = 0; c < 2; c++) {
@@ -480,9 +529,12 @@
 
             var half = NODE_SIZE * 0.5;
             var tw;
+            var nBand;
             ctx.fillStyle = NODE_COLOR_A;
             for (i = 0; i < nodeCount; i++) {
                 if (nodeTeal[i] === 0) {
+                    nBand = py[i] + oy[i];
+                    if (nBand < bandTop || nBand > bandBottom) continue;
                     tw = twPeak[i] * (0.35 + 0.65 * (0.5 + 0.5 * Math.sin(now * twFreq[i] + twPhase[i])));
                     ctx.globalAlpha = tw;
                     ctx.fillRect(px[i] + ox[i] - half, py[i] + oy[i] - half, NODE_SIZE, NODE_SIZE);
@@ -491,6 +543,8 @@
             ctx.fillStyle = NODE_COLOR_B;
             for (i = 0; i < nodeCount; i++) {
                 if (nodeTeal[i] === 1) {
+                    nBand = py[i] + oy[i];
+                    if (nBand < bandTop || nBand > bandBottom) continue;
                     tw = twPeak[i] * (0.35 + 0.65 * (0.5 + 0.5 * Math.sin(now * twFreq[i] + twPhase[i])));
                     ctx.globalAlpha = tw;
                     ctx.fillRect(px[i] + ox[i] - half, py[i] + oy[i] - half, NODE_SIZE, NODE_SIZE);
@@ -549,8 +603,7 @@
 
         /* -- boot ------------------------------------------------------------- */
 
-        resize();
-        seedNodes();
+        resize();                               // seeds on the first call
         clearCanvas();
 
         if (typeof win.matchMedia === 'function') {
@@ -583,6 +636,14 @@
             io.observe(canvas);
         }
 
+        /* Content growth (fonts, reveals) changes document height without a
+           window resize; watch <html> and reuse the debounced handler. */
+        var ro = null;
+        if (typeof win.ResizeObserver !== 'undefined' && doc.documentElement) {
+            ro = new win.ResizeObserver(onResize);
+            ro.observe(doc.documentElement);
+        }
+
         kick();                                 // auto-start; start() resumes later
 
         return {
@@ -609,6 +670,10 @@
                 if (io) {
                     io.disconnect();
                     io = null;
+                }
+                if (ro) {
+                    ro.disconnect();
+                    ro = null;
                 }
                 if (mq) {
                     if (mq.removeEventListener) mq.removeEventListener('change', onMq);
