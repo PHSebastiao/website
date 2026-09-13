@@ -382,7 +382,7 @@ function initCursorFx() {
 
 // ===== Plexus constellation layer =====
 function initConstellation() {
-    if (REDUCED || LOW_END) return;
+    if (REDUCED) return; // LOW_END still gets the degraded canvas budgets
 
     const canvas = document.getElementById('plexus');
     if (!canvas) return;

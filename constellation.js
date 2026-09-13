@@ -127,7 +127,8 @@
         if (!canvas || typeof canvas.getContext !== 'function') return null;
 
         var opts = options || {};
-        if (opts.reduced || opts.lowEnd) return null;   // render nothing
+        if (opts.reduced) return null;   // render nothing
+        var lowEndMode = !!opts.lowEnd;  // degraded budgets, still animated
 
         var doc = canvas.ownerDocument || global.document;
         var win = (doc && doc.defaultView) || global;
@@ -258,7 +259,7 @@
             nodeCount = nextCount;
             edgeCap = nextCap;
 
-            dpr = Math.min(win.devicePixelRatio || 1, DPR_CAP);
+            dpr = lowEndMode ? 1 : Math.min(win.devicePixelRatio || 1, DPR_CAP);
             var bw = Math.max(1, Math.round(w * dpr));
             var bh = Math.max(1, Math.round(h * dpr));
             if (canvas.width !== bw) canvas.width = bw;
