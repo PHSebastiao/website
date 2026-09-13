@@ -39,7 +39,6 @@ function boot() {
     initReveal();
     initCodeWindow();
     initStats();
-    initAuroraStars();
     if (!LOW_END) initCursorFx();
     initConstellation();
     initContact();
@@ -246,55 +245,6 @@ function initStats() {
     });
 }
 
-
-// ===== Aurora star field (80 twinkling stars, like the original) =====
-function initAuroraStars() {
-    const starLayer = document.querySelector('.aurora-stars');
-    if (!starLayer) return;
-
-    const STAR_COUNT = LOW_END ? 40 : 80;
-    const frag = document.createDocumentFragment();
-
-    for (let i = 0; i < STAR_COUNT; i++) {
-        const star = document.createElement('div');
-        star.className = 'aurora-star';
-        // Position in vw/vh like the original translateX/Y — scales with viewport
-        const fx = Math.random() * 100;
-        const fy = Math.random() * 100;
-        star.__fx = fx;
-        star.__fy = fy;
-        star.__ax = (fx / 100) * window.innerWidth;
-        star.__ay = (fy / 100) * window.innerHeight;
-        star.__ox = 0;
-        star.__oy = 0;
-        star.style.left = fx.toFixed(2) + 'vw';
-        star.style.top = fy.toFixed(2) + 'vh';
-
-        if (!REDUCED && !LOW_END) {
-            // Twinkle envelope: 2–5s cycle, up to 0.8 peak, up to 5s delay
-            const dur = (Math.random() * 3 + 2).toFixed(2);
-            const delay = (Math.random() * 5).toFixed(2);
-            const peak = (Math.random() * 0.8).toFixed(2);
-            star.style.setProperty('--peak', peak);
-            star.style.animation = 'aurora-twinkle ' + dur + 's ease-in-out ' + delay + 's infinite';
-        } else {
-            star.style.opacity = LOW_END ? '0.3' : '0.35';
-        }
-        frag.appendChild(star);
-    }
-
-    starLayer.appendChild(frag);
-}
-
-// Keep star absolute coords in sync with the viewport for the cursor pull
-window.addEventListener('resize', function () {
-    const stars = document.querySelectorAll('.aurora-star');
-    for (const s of stars) {
-        s.__ax = (s.__fx / 100) * window.innerWidth;
-        s.__ay = (s.__fy / 100) * window.innerHeight;
-    }
-}, { passive: true });
-
 // ===== Cursor interactivity =====
 function initCursorFx() {
     if (REDUCED) return;
@@ -304,12 +254,9 @@ function initCursorFx() {
 
     const blobLayer = bgAnim.querySelector('.aurora-blobs');
     const gradientLayer = bgAnim.querySelector('.aurora-gradient');
-    const starLayer = bgAnim.querySelector('.aurora-stars');
     const cursorGlow = document.querySelector('.cursor-glow');
     const BLOB_PARALLAX_MAX = 24;
     const GRADIENT_PARALLAX_MAX = 12;
-    const STAR_RADIUS = 130;
-    const STAR_PULL = 26;
     let targetX = window.innerWidth / 2;
     let targetY = window.innerHeight / 2;
     let cursorX = window.innerWidth / 2;
@@ -371,41 +318,8 @@ function initCursorFx() {
             blobLayer.style.translate = (-nx * BLOB_PARALLAX_MAX).toFixed(2) + 'px ' + (-ny * BLOB_PARALLAX_MAX).toFixed(2) + 'px';
         }
 
-        // Stars: gentle pull toward the cursor (twinkle keeps running via CSS)
-        let active = 0;
-        if (starLayer) {
-            const R2 = STAR_RADIUS * STAR_RADIUS;
-            for (let j = 0; j < starLayer.children.length; j++) {
-                const star = starLayer.children[j];
-                const sx = star.__ax + star.__ox;
-                const sy = star.__ay + star.__oy;
-                const dx = cursorX - sx;
-                const dy = cursorY - sy;
-                let tx = 0;
-                let ty = 0;
-                // Broad-phase box check: skip sqrt for the distant majority
-                if (dx < STAR_RADIUS && dx > -STAR_RADIUS && dy < STAR_RADIUS && dy > -STAR_RADIUS) {
-                    const d2 = dx * dx + dy * dy;
-                    if (d2 < R2 && d2 > 1) {
-                        const dist = Math.sqrt(d2);
-                        const force = (1 - dist / STAR_RADIUS) * STAR_PULL;
-                        tx = (dx / dist) * force;
-                        ty = (dy / dist) * force;
-                    }
-                }
-                star.__ox += (tx - star.__ox) * 0.12;
-                star.__oy += (ty - star.__oy) * 0.12;
-                // Skip the style write once the star has settled at rest
-                if (Math.abs(star.__ox) > 0.05 || Math.abs(star.__oy) > 0.05) {
-                    star.style.translate = star.__ox.toFixed(2) + 'px ' + star.__oy.toFixed(2) + 'px';
-                    active++;
-                } else if (star.__ox !== 0 || star.__oy !== 0) {
-                    star.__ox = 0;
-                    star.__oy = 0;
-                    star.style.translate = '0px 0px';
-                }
-            }
-        }
+        // Stars now live in the canvas plexus layer; nothing to settle here.
+        const active = 0;
 
         // Sleep when cursor and stars are settled; mousemove/visibilitychange kicks us back awake.
         const settled = Math.abs(targetX - cursorX) < 0.1 && Math.abs(targetY - cursorY) < 0.1 && active === 0;

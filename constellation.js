@@ -140,6 +140,9 @@
         var ox = new Float32Array(MAX_NODES);   // cursor-pull offset (star math)
         var oy = new Float32Array(MAX_NODES);
         var nodeTeal = new Uint8Array(MAX_NODES);
+        var twPhase = new Float32Array(MAX_NODES);  // twinkle phase, radians
+        var twFreq = new Float32Array(MAX_NODES);   // angular frequency, rad/ms
+        var twPeak = new Float32Array(MAX_NODES);   // twinkle peak alpha (CSS --peak)
 
         var nexts = new Int32Array(MAX_NODES);
         var heads = null;                       // Int32Array(cellCount), sized on resize
@@ -210,6 +213,10 @@
                 ox[i] = 0;
                 oy[i] = 0;
                 nodeTeal[i] = r() < TEAL_SHARE ? 1 : 0;
+                twPhase[i] = r() * TAU;
+                var tSec = 2 + r() * 3;                 // period 2s–5s
+                twFreq[i] = TAU / (tSec * 1000);        // rad/ms (rAF now is ms)
+                twPeak[i] = 0.2 + r() * 0.6;            // 0.2–0.8 envelope
             }
         }
 
@@ -472,18 +479,24 @@
             }
 
             var half = NODE_SIZE * 0.5;
+            var tw;
             ctx.fillStyle = NODE_COLOR_A;
             for (i = 0; i < nodeCount; i++) {
                 if (nodeTeal[i] === 0) {
+                    tw = twPeak[i] * (0.35 + 0.65 * (0.5 + 0.5 * Math.sin(now * twFreq[i] + twPhase[i])));
+                    ctx.globalAlpha = tw;
                     ctx.fillRect(px[i] + ox[i] - half, py[i] + oy[i] - half, NODE_SIZE, NODE_SIZE);
                 }
             }
             ctx.fillStyle = NODE_COLOR_B;
             for (i = 0; i < nodeCount; i++) {
                 if (nodeTeal[i] === 1) {
+                    tw = twPeak[i] * (0.35 + 0.65 * (0.5 + 0.5 * Math.sin(now * twFreq[i] + twPhase[i])));
+                    ctx.globalAlpha = tw;
                     ctx.fillRect(px[i] + ox[i] - half, py[i] + oy[i] - half, NODE_SIZE, NODE_SIZE);
                 }
             }
+            ctx.globalAlpha = 1;                    // always restored after both passes
 
             /* -- pass 2: at most one zap, on a random live link ---------------- */
 

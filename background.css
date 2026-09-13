@@ -161,40 +161,17 @@
     }
 }
 
-/* Layer 3: twinkling stars */
-.aurora-star {
-    position: absolute;
-    width: 2px;
-    height: 2px;
-    border-radius: 50%;
-    background: #fff;
-    opacity: 0;
-}
-
-@keyframes aurora-twinkle {
-    0%,
-    100% {
-        opacity: 0;
-    }
-    50% {
-        opacity: var(--peak, 0.6);
-    }
-}
+/* Layer 3: twinkling stars are drawn on canvas#plexus (constellation.js) */
 
 @media (prefers-reduced-motion: reduce) {
     .aurora-gradient,
     .aurora-blobs,
-    .aurora-blob,
-    .aurora-star {
+    .aurora-blob {
         animation: none !important;
     }
 
     .aurora-gradient {
         opacity: 0.5;
-    }
-
-    .aurora-star {
-        opacity: 0.35;
     }
 }
 
@@ -230,10 +207,5 @@ html.low-end .blob-fuchsia {
 
 html.low-end .blob-indigo {
     transform: translate(0, 0);
-}
-
-html.low-end .aurora-star {
-    animation: none;
-    opacity: 0.3;
 }
 
