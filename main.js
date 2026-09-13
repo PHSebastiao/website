@@ -314,15 +314,27 @@ function initCursorFx() {
     let cursorX = window.innerWidth / 2;
     let cursorY = window.innerHeight / 2;
 
+    let rafId = 0;
+    function kick() {
+        if (rafId || document.hidden) return;
+        rafId = requestAnimationFrame(animate);
+    }
+
     document.addEventListener('mousemove', function (e) {
         targetX = e.clientX;
         targetY = e.clientY;
+        kick();
     }, { passive: true });
 
     document.addEventListener('mouseleave', function () {
         targetX = window.innerWidth / 2;
         targetY = window.innerHeight / 2;
+        kick();
     }, { passive: true });
+
+    document.addEventListener('visibilitychange', function () {
+        if (!document.hidden) kick();
+    });
 
     function lerp(a, b, t) {
         return a + (b - a) * t;
@@ -331,6 +343,8 @@ function initCursorFx() {
 
 
     function animate() {
+        rafId = 0;
+
         cursorX = lerp(cursorX, targetX, 0.08);
         cursorY = lerp(cursorY, targetY, 0.08);
 
@@ -352,21 +366,26 @@ function initCursorFx() {
         }
 
         // Stars: gentle pull toward the cursor (twinkle keeps running via CSS)
+        let active = 0;
         if (starLayer) {
-            let active = 0;
+            const R2 = STAR_RADIUS * STAR_RADIUS;
             for (let j = 0; j < starLayer.children.length; j++) {
                 const star = starLayer.children[j];
                 const sx = star.__ax + star.__ox;
                 const sy = star.__ay + star.__oy;
                 const dx = cursorX - sx;
                 const dy = cursorY - sy;
-                const dist = Math.sqrt(dx * dx + dy * dy);
                 let tx = 0;
                 let ty = 0;
-                if (dist < STAR_RADIUS && dist > 1) {
-                    const force = (1 - dist / STAR_RADIUS) * STAR_PULL;
-                    tx = (dx / dist) * force;
-                    ty = (dy / dist) * force;
+                // Broad-phase box check: skip sqrt for the distant majority
+                if (dx < STAR_RADIUS && dx > -STAR_RADIUS && dy < STAR_RADIUS && dy > -STAR_RADIUS) {
+                    const d2 = dx * dx + dy * dy;
+                    if (d2 < R2 && d2 > 1) {
+                        const dist = Math.sqrt(d2);
+                        const force = (1 - dist / STAR_RADIUS) * STAR_PULL;
+                        tx = (dx / dist) * force;
+                        ty = (dy / dist) * force;
+                    }
                 }
                 star.__ox += (tx - star.__ox) * 0.12;
                 star.__oy += (ty - star.__oy) * 0.12;
@@ -382,22 +401,38 @@ function initCursorFx() {
             }
         }
 
-        requestAnimationFrame(animate);
+        // Sleep when cursor and stars are settled; mousemove/visibilitychange kicks us back awake.
+        const settled = Math.abs(targetX - cursorX) < 0.1 && Math.abs(targetY - cursorY) < 0.1 && active === 0;
+        if (!settled && !document.hidden) {
+            rafId = requestAnimationFrame(animate);
+        }
     }
 
-    // Magnetic attraction on interactive targets
+    // Magnetic attraction on interactive targets (rect cached per hover, not per mousemove)
     const magneticTargets = document.querySelectorAll('.social-link, .btn, .tech-item');
     const MAGNET_MAX = 8;
     const MAGNET_RADIUS = 70;
+    const MAGNET_R2 = MAGNET_RADIUS * MAGNET_RADIUS;
+    const magnetInvalidators = [];
     for (const el of magneticTargets) {
-        el.addEventListener('mousemove', function (e) {
+        let mcx = 0;
+        let mcy = 0;
+        let mvalid = false;
+        const cacheMagnetRect = function () {
             const rect = el.getBoundingClientRect();
-            const cx = rect.left + rect.width / 2;
-            const cy = rect.top + rect.height / 2;
-            const dx = e.clientX - cx;
-            const dy = e.clientY - cy;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < MAGNET_RADIUS && dist > 0) {
+            mcx = rect.left + rect.width / 2;
+            mcy = rect.top + rect.height / 2;
+            mvalid = true;
+        };
+        magnetInvalidators.push(function () { mvalid = false; });
+        el.addEventListener('mouseenter', cacheMagnetRect);
+        el.addEventListener('mousemove', function (e) {
+            if (!mvalid) cacheMagnetRect();
+            const dx = e.clientX - mcx;
+            const dy = e.clientY - mcy;
+            const d2 = dx * dx + dy * dy;
+            if (d2 < MAGNET_R2 && d2 > 0) {
+                const dist = Math.sqrt(d2);
                 const force = (1 - dist / MAGNET_RADIUS) * MAGNET_MAX;
                 el.style.setProperty('--mx', ((dx / dist) * force).toFixed(1) + 'px');
                 el.style.setProperty('--my', ((dy / dist) * force).toFixed(1) + 'px');
@@ -407,12 +442,22 @@ function initCursorFx() {
             }
         }, { passive: true });
         el.addEventListener('mouseleave', function () {
+            mvalid = false;
             el.style.setProperty('--mx', '0px');
             el.style.setProperty('--my', '0px');
         });
     }
+    // Cached centers shift on scroll/resize; drop them so the next mousemove re-caches.
+    const invalidateMagnets = function () {
+        for (const invalidate of magnetInvalidators) invalidate();
+    };
+    window.addEventListener('scroll', invalidateMagnets, { passive: true });
+    window.addEventListener('resize', function () {
+        invalidateMagnets();
+        kick();
+    }, { passive: true });
 
-    requestAnimationFrame(animate);
+    kick();
 }
 
 // ===== Copy e-mail + uptime =====
