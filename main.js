@@ -41,6 +41,7 @@ function boot() {
     initStats();
     initAuroraStars();
     if (!LOW_END) initCursorFx();
+    initConstellation();
     initContact();
     initTerminal();
 }
@@ -314,6 +315,9 @@ function initCursorFx() {
     let cursorX = window.innerWidth / 2;
     let cursorY = window.innerHeight / 2;
 
+    // Shared read-only cursor position for other layers (plexus); no extra listeners.
+    window.__auroraCursor = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+
     let rafId = 0;
     function kick() {
         if (rafId || document.hidden) return;
@@ -347,6 +351,8 @@ function initCursorFx() {
 
         cursorX = lerp(cursorX, targetX, 0.08);
         cursorY = lerp(cursorY, targetY, 0.08);
+        window.__auroraCursor.x = cursorX;
+        window.__auroraCursor.y = cursorY;
 
         // Cursor glow follows
         if (cursorGlow) {
@@ -458,6 +464,20 @@ function initCursorFx() {
     }, { passive: true });
 
     kick();
+}
+
+// ===== Plexus constellation layer =====
+function initConstellation() {
+    if (REDUCED || LOW_END) return;
+
+    const canvas = document.getElementById('plexus');
+    if (!canvas) return;
+
+    initPlexus(canvas, {
+        getCursor: () => window.__auroraCursor,
+        lowEnd: LOW_END,
+        reduced: REDUCED
+    });
 }
 
 // ===== Copy e-mail + uptime =====

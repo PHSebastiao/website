@@ -34,6 +34,7 @@
     <link rel="stylesheet" href="base.css">
     <link rel="stylesheet" href="background.css">
     <link rel="stylesheet" href="components.css">
+    <link rel="stylesheet" href="constellation.css">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -88,6 +89,7 @@
                 <div class="aurora-blob blob-fuchsia"></div>
                 <div class="aurora-blob blob-indigo"></div>
             </div>
+            <canvas id="plexus" class="aurora-layer plexus-canvas" aria-hidden="true"></canvas>
             <div class="aurora-layer aurora-stars" aria-hidden="true"></div>
         </div>
 
@@ -318,6 +320,7 @@
 
     </div>
 
+    <script src="constellation.js" defer></script>
     <script src="main.js" defer></script>
 </body>
 

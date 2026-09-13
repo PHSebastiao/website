@@ -1,0 +1,51 @@
+/* ==========================================================================
+   constellation.css — canvas plexus layer (Slice A)
+   --------------------------------------------------------------------------
+   Styles for the <canvas> handed to initPlexus(). It is a decorative,
+   transparent layer: the host page keeps its own near-black background,
+   this canvas only paints the purple/teal network on top of it.
+
+   Usage (matches both the standalone class and the site integration's
+   canvas, which carries .plexus-canvas inside .background-animation):
+       <canvas class="plexus-canvas" aria-hidden="true"></canvas>
+       <script src="constellation.js" defer></script>
+       <script>
+         initPlexus(document.getElementById('plexus'), {
+           getCursor: function () { return window.__auroraCursor; },
+           lowEnd: LOW_END,
+           reduced: REDUCED
+         });
+       </script>
+   ========================================================================== */
+
+.constellation-canvas,
+.plexus-canvas {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    pointer-events: none;
+    /* Decoration only: never captures input, never paints a backdrop. */
+}
+
+/* Pin the layer to the viewport instead of the nearest positioned ancestor. */
+.constellation-canvas--fixed {
+    position: fixed;
+}
+
+/* Reduced motion / software rendering: the JS layer renders nothing, but mask
+   a stale frame if one is already on screen. visibility (not display) keeps
+   the element measurable so a later un-reduce can resume cleanly. */
+@media (prefers-reduced-motion: reduce) {
+    .constellation-canvas,
+    .plexus-canvas {
+        visibility: hidden;
+    }
+}
+
+html.low-end .constellation-canvas,
+html.low-end .plexus-canvas {
+    visibility: hidden;
+}
