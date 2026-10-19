@@ -1,50 +1,40 @@
+/* ==========================================================================
+   base.css — tokens, reset, layout primitives
+   Palette derived from the brand mark (favicon gradient #59819f → #3e2b8e):
+   neutral base carries ~70% of the surface, steel the structure, violet the
+   single accent (links, primary CTA, focus ring only).
+   ========================================================================== */
+
 :root {
-    --accent: #4da3ff;
-    --accent-channel: 77, 163, 255;
-    --accent-2: #8a2be2;
-    --surface: 26, 26, 46;
-    --border: 42, 42, 62;
-    --bg: #0a0a0f;
-    --glass-alpha: 0.6;
-    --glass-blur: 10px;
-    --cursor-default: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%234da3ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s8-10 10-10 10 10 10 10-8 10-10 10S2 12 2 12z"/></svg>'),
-        auto;
-    --cursor-pointer: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="%234da3ff" stroke="%23ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s8-10 10-10 10 10 10 10-8 10-10 10S2 12 2 12z"/></svg>'),
-        pointer;
+    --bg: #0b0b0e;
+    --surface: #141419;
+    --surface-2: #1d1d24;
+    --border: #26262e;
+
+    --text: #ededf0;
+    --text-muted: #a8a8b4;
+    --text-faint: #85858f;
+
+    --accent: #a78bfa;
+    --accent-deep: #3e2b8e;
+    --steel: #59819f;
+
+    --radius-sm: 4px;
+    --radius-md: 10px;
+    --speed: 150ms;
+    --ease: cubic-bezier(0.2, 0, 0, 1);
+
+    --fs-xs: 13px;
+    --fs-sm: 16px;
+    --fs-md: 20px;
+    --fs-lg: 25px;
+    --fs-xl: 32px;
+    --fs-hero: 44px;
+
+    --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono: "Fira Code", "Courier New", monospace;
 }
 
-.glass {
-    background: rgba(var(--surface), var(--glass-alpha));
-    backdrop-filter: blur(var(--glass-blur));
-    border: 1px solid rgba(var(--border), 0.8);
-}
-
-/* ===== Custom Scrollbar ===== */
-::-webkit-scrollbar {
-    width: 10px;
-}
-
-::-webkit-scrollbar-track {
-    background: var(--bg);
-}
-
-::-webkit-scrollbar-thumb {
-    background: rgba(var(--accent-channel), 0.3);
-    border-radius: 5px;
-    border: 2px solid var(--bg);
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: rgba(var(--accent-channel), 0.5);
-}
-
-html {
-    scrollbar-color: rgba(var(--accent-channel), 0.4) var(--bg);
-    scrollbar-width: thin;
-    scroll-behavior: smooth;
-}
-
-/* ===== Reset & Base ===== */
 *,
 *::before,
 *::after {
@@ -53,22 +43,19 @@ html {
     padding: 0;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
-    font-family:
-        "Inter",
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        sans-serif;
+    font-family: var(--font-sans);
     background: var(--bg);
-    color: #e0e0e0;
+    color: var(--text-muted);
+    font-size: var(--fs-sm);
     line-height: 1.6;
-    font-weight: 400;
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
-    cursor: var(--cursor-default);
 }
 
 img {
@@ -85,64 +72,47 @@ ul {
     list-style: none;
 }
 
-/* ===== Scroll Progress ===== */
-.scroll-progress-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: rgba(var(--surface), 0.5);
-    z-index: 1000;
-    backdrop-filter: blur(10px);
+strong {
+    color: var(--text);
+    font-weight: 600;
 }
 
-.scroll-progress-bar {
-    height: 100%;
-    width: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--accent-2));
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.1s ease;
-    box-shadow: 0 0 10px rgba(var(--accent-channel), 0.5);
+h1,
+h2,
+h3 {
+    color: var(--text);
+    font-weight: 600;
+    line-height: 1.25;
 }
 
-/* ===== Layout ===== */
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+}
+
 .container {
     max-width: 720px;
     margin: 0 auto;
     padding: 0 1.5rem;
     position: relative;
-    z-index: 1;
 }
 
 .page-wrap {
     display: flex;
     flex-direction: column;
-    min-height: calc(100vh - 4rem);
-    padding-top: 3rem;
+    min-height: 100vh;
 }
 
 .section {
     padding: 4rem 1.5rem;
-    transition: all 0.6s ease;
-}
-
-html.js .section {
-    opacity: 0;
-    transform: translateY(20px);
-}
-
-html.js .section.visible {
-    opacity: 1;
-    transform: translateY(0);
+    border-top: 1px solid var(--border);
 }
 
 .section-center {
     text-align: center;
 }
 
-/* ===== Screen Reader Only ===== */
 .sr-only {
     position: absolute;
     width: 1px;
@@ -156,8 +126,8 @@ html.js .section.visible {
     border: 0;
 }
 
-/* ===== Reduced Motion Support ===== */
 @media (prefers-reduced-motion: reduce) {
+
     *,
     *::before,
     *::after {
